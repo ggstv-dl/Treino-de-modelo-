@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Dados e artefatos de treino (muito grandes para o Git; versionar no Hugging Face)
+dataset/*
+!dataset/.gitkeep
+runs/
+*.pt
+*.onnx
+
+# Resultados de inferência
+resultado*.jpg
+
+# Segredos (token do bot do Telegram etc.)
+.env
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

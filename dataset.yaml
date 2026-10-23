@@ -1,0 +1,22 @@
+# Configuração do dataset (formato YOLO-seg).
+#
+# Estrutura esperada (relativa à raiz do repositório):
+#   dataset/
+#     images/train  images/val  images/test
+#     labels/train  labels/val  labels/test
+#
+# Cada imagem tem um .txt homônimo em labels/, com um polígono por linha:
+#   <id_da_classe> x1 y1 x2 y2 ... xn yn      (coordenadas normalizadas entre 0 e 1)
+#
+# Para exportar do X-AnyLabeling, escolha o formato YOLO-seg.
+path: dataset
+train: images/train
+val: images/val
+test: images/test
+
+# ATENÇÃO: a ordem define o id usado nos .txt. Ajuste às classes reais do projeto
+# e NÃO altere depois de rotular, senão todos os rótulos ficam trocados.
+names:
+  0: construcao
+  1: vegetacao
+  2: via
