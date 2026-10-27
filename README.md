@@ -42,6 +42,30 @@ dataset/
 Cada linha do `.txt` é um polígono normalizado: `<id_da_classe> x1 y1 x2 y2 ... xn yn`.
 As classes ficam em `dataset.yaml` (a ordem define o id; não altere depois de rotular).
 Rotulagem no [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling), exportando em YOLO-seg.
+### Gerando o dataset a partir do Semantic Drone Dataset
+
+Baixe o [Semantic Drone Dataset](https://www.kaggle.com/datasets/awsaf49/semantic-drone-dataset)
+(imagens, máscaras e `class_dict.csv`). Primeiro confira se o script entende o download
+(não grava nada):
+
+```bash
+python -m src.preparar_dataset --imagens CAMINHO/images --mascaras CAMINHO/masks \
+    --class-dict CAMINHO/class_dict.csv --inspecionar
+```
+
+Depois gere o dataset (redimensiona, agrupa as classes, converte em polígonos e divide 70/20/10 por imagem):
+
+```bash
+python -m src.preparar_dataset --imagens CAMINHO/images --mascaras CAMINHO/masks \
+    --class-dict CAMINHO/class_dict.csv
+```
+
+O agrupamento de classes (por exemplo, `roof` e `wall` viram `construcao`) fica na constante
+`MAPEAMENTO` do script e precisa usar os mesmos nomes do `dataset.yaml`.
+
+### Imagens próprias
+
+Rotulagem no [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling), exportando em YOLO-seg.
 
 ## Uso
 
@@ -82,7 +106,8 @@ e reportadas também como média entre classes (mIoU / mDice).
 ## Status
 
 - [x] Pipeline de treino, avaliação e inferência
-- [ ] Dataset rotulado
+- [x] Script de preparação do dataset
+- [ ] Dataset gerado e conferido
 - [ ] Treino principal
 - [ ] Métricas de validação
 - [ ] Integração com o bot do Telegram
