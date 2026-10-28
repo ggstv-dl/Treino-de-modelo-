@@ -33,23 +33,22 @@ def analisar(img_path, out_path="resultado.jpg", conf=config.CONF, imgsz=config.
     """Roda o modelo em uma imagem.
 
     Retorna (caminho_da_imagem_anotada, {nome_da_classe: porcentagem_da_area}).
+    As áreas usam a união das máscaras binárias, preservando buracos internos.
     """
     if not Path(img_path).exists():
         raise FileNotFoundError(f"Imagem não encontrada: {img_path}")
 
     modelo = carregar_modelo(str(pesos))
-    r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, verbose=False)[0]
+    r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, retina_masks=True, verbose=False)[0]
     cv2.imwrite(str(out_path), r.plot())  # imagem anotada (BGR)
 
     h, w = r.orig_shape
     mascaras = {}  # id da classe -> máscara binária (união de todas as instâncias da classe)
     if r.masks is not None:
         classes = r.boxes.cls.cpu().numpy().astype(int)
-        for poligono, c in zip(r.masks.xy, classes):  # polígonos já em coordenadas da imagem original
-            if len(poligono) < 3:
-                continue
+        for binaria, c in zip(r.masks.data.cpu().numpy(), classes):
             mascara = mascaras.setdefault(c, np.zeros((h, w), np.uint8))
-            cv2.fillPoly(mascara, [poligono.astype(np.int32)], 1)
+            mascara |= (binaria > 0.5).astype(np.uint8)
 
     areas = {r.names[c]: round(float(100 * m.sum() / (h * w)), 2) for c, m in sorted(mascaras.items())}
     return str(out_path), areas

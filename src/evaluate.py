@@ -38,14 +38,14 @@ def carregar_ground_truth(arquivo_rotulo, h, w, nc):
 
 
 def prever_mascaras(modelo, img_path, h, w, nc, conf, imgsz):
-    """Roda o modelo e devolve as máscaras previstas, shape (nc, h, w)."""
+    """Une as máscaras binárias por classe na resolução original, preservando buracos."""
     pred = np.zeros((nc, h, w), np.uint8)
-    r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, verbose=False)[0]
+    r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, retina_masks=True, verbose=False)[0]
     if r.masks is not None:
         classes = r.boxes.cls.cpu().numpy().astype(int)
-        for poligono, c in zip(r.masks.xy, classes):  # polígonos já em coordenadas da imagem original
-            if len(poligono) >= 3:
-                cv2.fillPoly(pred[c], [poligono.astype(np.int32)], 1)
+        for mascara, c in zip(r.masks.data.cpu().numpy(), classes):
+            # Contornos externos (masks.xy) perderiam os vazios internos da máscara.
+            pred[c] |= (mascara > 0.5).astype(np.uint8)
     return pred
 
 

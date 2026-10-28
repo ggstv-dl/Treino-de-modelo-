@@ -98,15 +98,61 @@ def mascaras_por_classe(arr, regras):
     return saida
 
 
+def unir_buracos(contorno, buracos):
+    """Liga cada buraco ao contorno por uma ponte percorrida nos dois sentidos.
+
+    YOLO-seg aceita apenas uma sequência de pontos por objeto. As pontes permitem
+    representar os anéis internos nessa sequência sem preencher seus interiores.
+    Processar da esquerda para a direita permite ligar cada buraco por um raio
+    horizontal até a borda mais próxima, inclusive a de um buraco já incorporado.
+    """
+    pontos = contorno.astype(np.float64)
+    for buraco in sorted(buracos, key=lambda b: b[:, 0].min()):
+        inicio = np.lexsort((buraco[:, 1], buraco[:, 0]))[0]
+        anel = np.roll(buraco, -inicio, axis=0)
+        x, y = anel[0]
+        a, b = pontos, np.roll(pontos, -1, axis=0)
+        dy = b[:, 1] - a[:, 1]
+        cruza = (np.minimum(a[:, 1], b[:, 1]) <= y) & (y <= np.maximum(a[:, 1], b[:, 1]))
+        xs = np.full(len(pontos), -np.inf)
+        inclinadas = cruza & (dy != 0)
+        xs[inclinadas] = (a[inclinadas, 0] + (y - a[inclinadas, 1])
+                          * (b[inclinadas, 0] - a[inclinadas, 0]) / dy[inclinadas])
+        horizontais = cruza & (dy == 0) & (np.minimum(a[:, 0], b[:, 0]) <= x)
+        xs[horizontais] = np.minimum(x, np.maximum(a[horizontais, 0], b[horizontais, 0]))
+        xs[xs > x] = -np.inf
+        i = int(np.argmax(xs))
+        if not np.isfinite(xs[i]):
+            raise ValueError("Buraco fora do contorno externo: não foi possível preservar a região interna.")
+        ponte = np.array([[xs[i], y]])
+        pontos = np.concatenate((pontos[:i + 1], ponte, anel, anel[:1], ponte, pontos[i + 1:]))
+    return pontos
+
+
 def extrair_poligonos(mascara, area_min_px, epsilon_rel):
-    """Contornos externos da máscara, simplificados. Descarta regiões menores que area_min_px."""
-    contornos, _ = cv2.findContours(mascara.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    """Preserva buracos e suas ilhas; simplifica apenas regiões sem anéis internos."""
+    contornos, hierarquia = cv2.findContours(mascara.astype(np.uint8), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    if hierarquia is None:
+        return []
+    hierarquia = hierarquia[0]
     poligonos = []
-    for c in contornos:
-        if cv2.contourArea(c) < area_min_px:
+    for i, c in enumerate(contornos):
+        if hierarquia[i, 3] != -1 or cv2.contourArea(c) < area_min_px:
             continue
-        eps = epsilon_rel * cv2.arcLength(c, True)
-        pontos = cv2.approxPolyDP(c, eps, True).reshape(-1, 2)
+        buracos = []
+        filho = hierarquia[i, 2]
+        while filho != -1:
+            # Não simplifica anéis internos: a simplificação pode apagar buracos
+            # pequenos ou cruzar a borda externa em regiões estreitas.
+            buracos.append(contornos[filho].reshape(-1, 2))
+            filho = hierarquia[filho, 0]
+        if buracos:
+            # Mantém também a borda externa original para garantir que as pontes
+            # fiquem dentro da região, mesmo quando o entorno é fino ou côncavo.
+            pontos = unir_buracos(c.reshape(-1, 2), buracos)
+        else:
+            eps = epsilon_rel * cv2.arcLength(c, True)
+            pontos = cv2.approxPolyDP(c, eps, True).reshape(-1, 2)
         if len(pontos) >= 3:
             poligonos.append(pontos)
     return poligonos
@@ -175,7 +221,7 @@ def main():
     p.add_argument("--split", type=float, nargs=3, default=[0.7, 0.2, 0.1], metavar=("TREINO", "VAL", "TESTE"))
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--area-min", type=float, default=0.0005, help="área mínima de um polígono, fração da imagem (padrão: %(default)s)")
-    p.add_argument("--epsilon", type=float, default=0.002, help="simplificação dos polígonos, fração do perímetro (padrão: %(default)s)")
+    p.add_argument("--epsilon", type=float, default=0.002, help="simplificação das regiões sem buracos, fração do perímetro (padrão: %(default)s)")
     p.add_argument("--manter-vazias", action="store_true", help="mantém imagens sem nenhum polígono (como fundo puro)")
     p.add_argument("--sobrescrever", action="store_true", help="apaga images/ e labels/ da saída antes de gerar")
     p.add_argument("--inspecionar", action="store_true", help="só mostra o que foi entendido, sem gravar nada")
