@@ -17,6 +17,7 @@ import numpy as np
 from ultralytics import YOLO
 
 from src import config
+from src.mascaras import resolver_sobreposicoes
 
 
 def carregar_ground_truth(arquivo_rotulo, h, w, nc):
@@ -38,9 +39,10 @@ def carregar_ground_truth(arquivo_rotulo, h, w, nc):
 
 
 def prever_mascaras(modelo, img_path, h, w, nc, conf, imgsz):
-    """Une as máscaras binárias por classe na resolução original, preservando buracos."""
+    """Preserva buracos e usa a maior confiança para resolver disputas entre classes."""
     pred = np.zeros((nc, h, w), np.uint8)
     r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, retina_masks=True, verbose=False)[0]
+    resolver_sobreposicoes(r)
     if r.masks is not None:
         classes = r.boxes.cls.cpu().numpy().astype(int)
         for mascara, c in zip(r.masks.data.cpu().numpy(), classes):
