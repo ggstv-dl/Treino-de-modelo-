@@ -18,6 +18,7 @@ import numpy as np
 from ultralytics import YOLO
 
 from src import config
+from src.mascaras import calcular_areas, resolver_sobreposicoes
 
 
 @lru_cache(maxsize=2)
@@ -33,13 +34,14 @@ def analisar(img_path, out_path="resultado.jpg", conf=config.CONF, imgsz=config.
     """Roda o modelo em uma imagem.
 
     Retorna (caminho_da_imagem_anotada, {nome_da_classe: porcentagem_da_area}).
-    As áreas usam a união das máscaras binárias, preservando buracos internos.
+    Preserva buracos e atribui pixels em disputa à instância de maior confiança.
     """
     if not Path(img_path).exists():
         raise FileNotFoundError(f"Imagem não encontrada: {img_path}")
 
     modelo = carregar_modelo(str(pesos))
     r = modelo.predict(str(img_path), imgsz=imgsz, conf=conf, retina_masks=True, verbose=False)[0]
+    resolver_sobreposicoes(r)
     cv2.imwrite(str(out_path), r.plot())  # imagem anotada (BGR)
 
     h, w = r.orig_shape
@@ -50,7 +52,7 @@ def analisar(img_path, out_path="resultado.jpg", conf=config.CONF, imgsz=config.
             mascara = mascaras.setdefault(c, np.zeros((h, w), np.uint8))
             mascara |= (binaria > 0.5).astype(np.uint8)
 
-    areas = {r.names[c]: round(float(100 * m.sum() / (h * w)), 2) for c, m in sorted(mascaras.items())}
+    areas = calcular_areas(mascaras, r.names, h * w)
     return str(out_path), areas
 
 
