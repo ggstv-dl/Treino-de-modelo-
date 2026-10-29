@@ -103,6 +103,10 @@ caminho_imagem, areas = analisar("foto.jpg")   # areas = {"vegetacao": 42.1, ...
 Calculadas por classe, com os pixels de todo o split acumulados (métrica global),
 e reportadas também como média entre classes (mIoU / mDice).
 
+Na avaliação de 10 fotos próprias em 29/10/2026, o modelo obteve **mIoU de
+51,77% e mDice de 67,59%**. Os parâmetros, resultados por classe e limitações
+estão no [relatório da avaliação](docs/avaliacao_fotos_proprias.md).
+
 ## Status
 
 - [x] Pipeline de treino, avaliação e inferência

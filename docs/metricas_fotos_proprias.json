@@ -1,0 +1,353 @@
+{
+  "imagens": 10,
+  "pesos": "runs/mvp_drone/weights/best.pt",
+  "imgsz": 640,
+  "conf": 0.25,
+  "device": "cpu",
+  "por_classe": {
+    "construcao": {
+      "iou": 0.5255744251833684,
+      "dice": 0.6890184005545272,
+      "intersecao_pixels": 19871085,
+      "predicao_pixels": 23180862,
+      "referencia_pixels": 34498541,
+      "falso_positivo_pixels": 3309777,
+      "falso_negativo_pixels": 14627456
+    },
+    "vegetacao": {
+      "iou": 0.6415471072016147,
+      "dice": 0.7816371572732697,
+      "intersecao_pixels": 10119553,
+      "predicao_pixels": 15063569,
+      "referencia_pixels": 10829655,
+      "falso_positivo_pixels": 4944016,
+      "falso_negativo_pixels": 710102
+    },
+    "via": {
+      "iou": 0.38598358648941705,
+      "dice": 0.55698146825401,
+      "intersecao_pixels": 9804520,
+      "predicao_pixels": 21802602,
+      "referencia_pixels": 13403309,
+      "falso_positivo_pixels": 11998082,
+      "falso_negativo_pixels": 3598789
+    }
+  },
+  "mIoU": 0.5177017062914667,
+  "mDice": 0.6758790086939356,
+  "metodo": "IoU/Dice por classe acumulando pixels das 10 fotos; media aritmetica entre classes. Funcoes de src.evaluate, mascaras nativas e sobreposicoes da predicao resolvidas por confianca.",
+  "sobreposicao_referencia_pixels": 7120,
+  "sobreposicao_referencia_percentual": 0.007786036225189664,
+  "por_imagem": [
+    {
+      "imagem": "DJI_20261022145716_0111_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.12299122288155276,
+          "dice": 0.21904218016230254,
+          "intersecao_pixels": 175285,
+          "predicao_pixels": 210686,
+          "referencia_pixels": 1389782
+        },
+        "vegetacao": {
+          "iou": 0.7815422557437969,
+          "dice": 0.8773771749999852,
+          "intersecao_pixels": 1490684,
+          "predicao_pixels": 1860152,
+          "referencia_pixels": 1537894
+        },
+        "via": {
+          "iou": 0.5911078580279683,
+          "dice": 0.743014189824431,
+          "intersecao_pixels": 1699162,
+          "predicao_pixels": 2578544,
+          "referencia_pixels": 1995156
+        }
+      },
+      "sobreposicao_referencia_pixels": 4288
+    },
+    {
+      "imagem": "DJI_20261022145855_0144_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.8592118783307354,
+          "dice": 0.9242753753296429,
+          "intersecao_pixels": 3526215,
+          "predicao_pixels": 3892341,
+          "referencia_pixels": 3737885
+        },
+        "vegetacao": {
+          "iou": 0.5810309349098333,
+          "dice": 0.7350026139026428,
+          "intersecao_pixels": 1727208,
+          "predicao_pixels": 2671057,
+          "referencia_pixels": 2028812
+        },
+        "via": {
+          "iou": 0.0,
+          "dice": 0.0,
+          "intersecao_pixels": 0,
+          "predicao_pixels": 398837,
+          "referencia_pixels": 0
+        }
+      },
+      "sobreposicao_referencia_pixels": 128
+    },
+    {
+      "imagem": "DJI_20261022145931_0156_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.08504747606699292,
+          "dice": 0.15676268171281738,
+          "intersecao_pixels": 95964,
+          "predicao_pixels": 96085,
+          "referencia_pixels": 1128237
+        },
+        "vegetacao": {
+          "iou": 0.4740075988058649,
+          "dice": 0.6431548917249433,
+          "intersecao_pixels": 1828335,
+          "predicao_pixels": 3848061,
+          "referencia_pixels": 1837459
+        },
+        "via": {
+          "iou": 0.3910374858843097,
+          "dice": 0.5622242245121375,
+          "intersecao_pixels": 957808,
+          "predicao_pixels": 2363334,
+          "referencia_pixels": 1043876
+        }
+      },
+      "sobreposicao_referencia_pixels": 0
+    },
+    {
+      "imagem": "DJI_20261022145955_0164_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.0,
+          "dice": 0.0,
+          "intersecao_pixels": 0,
+          "predicao_pixels": 0,
+          "referencia_pixels": 3959174
+        },
+        "vegetacao": {
+          "iou": 0.5921181550967086,
+          "dice": 0.743811824770935,
+          "intersecao_pixels": 81585,
+          "predicao_pixels": 129457,
+          "referencia_pixels": 89913
+        },
+        "via": {
+          "iou": 0.6005357000903032,
+          "dice": 0.7504183756181392,
+          "intersecao_pixels": 2100137,
+          "predicao_pixels": 2695570,
+          "referencia_pixels": 2901673
+        }
+      },
+      "sobreposicao_referencia_pixels": 11
+    },
+    {
+      "imagem": "DJI_20261022150013_0170_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.660087489823895,
+          "dice": 0.7952442191994571,
+          "intersecao_pixels": 2005994,
+          "predicao_pixels": 2155973,
+          "referencia_pixels": 2889003
+        },
+        "vegetacao": {
+          "iou": 0.6081152331430013,
+          "dice": 0.7563080314269056,
+          "intersecao_pixels": 1773877,
+          "predicao_pixels": 2720167,
+          "referencia_pixels": 1970718
+        },
+        "via": {
+          "iou": 0.0,
+          "dice": 0.0,
+          "intersecao_pixels": 0,
+          "predicao_pixels": 1512587,
+          "referencia_pixels": 0
+        }
+      },
+      "sobreposicao_referencia_pixels": 297
+    },
+    {
+      "imagem": "DJI_20261022150043_0180_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.7071950814223995,
+          "dice": 0.8284877213132306,
+          "intersecao_pixels": 3234484,
+          "predicao_pixels": 4411267,
+          "referencia_pixels": 3396897
+        },
+        "vegetacao": {
+          "iou": 0.8313129199747747,
+          "dice": 0.9078873532833761,
+          "intersecao_pixels": 1124443,
+          "predicao_pixels": 1334202,
+          "referencia_pixels": 1142852
+        },
+        "via": {
+          "iou": 0.0698342252357595,
+          "dice": 0.1305514884240502,
+          "intersecao_pixels": 148949,
+          "predicao_pixels": 610351,
+          "referencia_pixels": 1671492
+        }
+      },
+      "sobreposicao_referencia_pixels": 0
+    },
+    {
+      "imagem": "DJI_20261022150137_0198_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.8257270553371706,
+          "dice": 0.9045460031096241,
+          "intersecao_pixels": 4560801,
+          "predicao_pixels": 5382163,
+          "referencia_pixels": 4702014
+        },
+        "vegetacao": {
+          "iou": 0.7349036535937066,
+          "dice": 0.8471982315230193,
+          "intersecao_pixels": 306787,
+          "predicao_pixels": 417106,
+          "referencia_pixels": 307133
+        },
+        "via": {
+          "iou": 0.4685343948278297,
+          "dice": 0.6380979519145147,
+          "intersecao_pixels": 985303,
+          "predicao_pixels": 1570785,
+          "referencia_pixels": 1517465
+        }
+      },
+      "sobreposicao_referencia_pixels": 17
+    },
+    {
+      "imagem": "DJI_20261022150155_0204_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.009524390919440046,
+          "dice": 0.018869065482936095,
+          "intersecao_pixels": 42125,
+          "predicao_pixels": 47949,
+          "referencia_pixels": 4417031
+        },
+        "vegetacao": {
+          "iou": 0.856724130725811,
+          "dice": 0.9228340565498111,
+          "intersecao_pixels": 1189032,
+          "predicao_pixels": 1303811,
+          "referencia_pixels": 1273103
+        },
+        "via": {
+          "iou": 0.19433672792064818,
+          "dice": 0.3254303805242435,
+          "intersecao_pixels": 1073018,
+          "predicao_pixels": 5440445,
+          "referencia_pixels": 1154010
+        }
+      },
+      "sobreposicao_referencia_pixels": 75
+    },
+    {
+      "imagem": "DJI_20261022150225_0214_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.8399354953247796,
+          "dice": 0.9130053716111572,
+          "intersecao_pixels": 4480373,
+          "predicao_pixels": 5121686,
+          "referencia_pixels": 4692874
+        },
+        "vegetacao": {
+          "iou": 0.7822697930247395,
+          "dice": 0.8778354389288366,
+          "intersecao_pixels": 592215,
+          "predicao_pixels": 725321,
+          "referencia_pixels": 623941
+        },
+        "via": {
+          "iou": 0.683629438547484,
+          "dice": 0.8120901463177919,
+          "intersecao_pixels": 930460,
+          "predicao_pixels": 1213730,
+          "referencia_pixels": 1077789
+        }
+      },
+      "sobreposicao_referencia_pixels": 2304
+    },
+    {
+      "imagem": "DJI_20261022150307_0228_D.JPG",
+      "por_classe": {
+        "construcao": {
+          "iou": 0.407081334191925,
+          "dice": 0.5786180575349731,
+          "intersecao_pixels": 1749844,
+          "predicao_pixels": 1862712,
+          "referencia_pixels": 4185644
+        },
+        "vegetacao": {
+          "iou": 0.08079126548486758,
+          "dice": 0.14950392007215707,
+          "intersecao_pixels": 5387,
+          "predicao_pixels": 54235,
+          "referencia_pixels": 17830
+        },
+        "via": {
+          "iou": 0.537850393062099,
+          "dice": 0.6994833769117884,
+          "intersecao_pixels": 1909683,
+          "predicao_pixels": 3418419,
+          "referencia_pixels": 2041848
+        }
+      },
+      "sobreposicao_referencia_pixels": 0
+    }
+  ],
+  "hashes_sha256": {
+    "dataset/rotulagem_propria/images/DJI_20261022145716_0111_D.JPG": "916f44af6ba91d52def0870ce23106bb687cd44ac941a263d1325ac5c96dd411",
+    "dataset/labels/images/DJI_20261022145716_0111_D.txt": "0b6f7bf059cfa4e47893c61dee6cde5e5f652424aa8291f05f43d207ba049c3d",
+    "dataset/rotulagem_propria/images/DJI_20261022145716_0111_D.json": "d1110a4f99ff27bbcc68c2fadcf995509dd3004c1657782395ec2cc3442d2cf3",
+    "dataset/rotulagem_propria/images/DJI_20261022145855_0144_D.JPG": "63538372703a236f72426b9216e29e8bff14dd247c8f1c8d7bc24858a752eb34",
+    "dataset/labels/images/DJI_20261022145855_0144_D.txt": "4789945d414d5e2771a220c8f668f5d26b7d721a4ae06ca42d3ee8638e802212",
+    "dataset/rotulagem_propria/images/DJI_20261022145855_0144_D.json": "c17a1d66e3ffcf466f01059bb7f7f64de2ff0a1863f7c54c9f41d9c1dd574feb",
+    "dataset/rotulagem_propria/images/DJI_20261022145931_0156_D.JPG": "05c60b7319f062a4134764a0404992fdbc94479a5753845d334c39e25077cb81",
+    "dataset/labels/images/DJI_20261022145931_0156_D.txt": "3fc5b13af346c1466ba431dafaa83b171067041a204e1557f8314b481df306eb",
+    "dataset/rotulagem_propria/images/DJI_20261022145931_0156_D.json": "1f5f5dacaf0341858fe0b2532cc35c8406a13e9a6901cb60ed21333a65f343c1",
+    "dataset/rotulagem_propria/images/DJI_20261022145955_0164_D.JPG": "329969e38bd43c8735c288a582e7d3e73ae00b27dd9ef626120a543c115b910e",
+    "dataset/labels/images/DJI_20261022145955_0164_D.txt": "456bc029c157bc5be5a546629a6233b4748f32f7e190d9c5ee0d1d6db6c4fc41",
+    "dataset/rotulagem_propria/images/DJI_20261022145955_0164_D.json": "7f37fdda3e3c5b90f7bc369218290fa1d457ddc959fe08835a0b70c0ac69c9f6",
+    "dataset/rotulagem_propria/images/DJI_20261022150013_0170_D.JPG": "55b29c7134f2f91a533b95e88cf2aa56d616cb5e6d884dc81a68bfc7d0f20ed1",
+    "dataset/labels/images/DJI_20261022150013_0170_D.txt": "8d0eb7e75b89003dd1fb3bb70509ee479a1f51d68f460c7efe9d3f41d5843675",
+    "dataset/rotulagem_propria/images/DJI_20261022150013_0170_D.json": "01faf562b074b0728dc220be3040a6e1468424d250bb08b7b2508c1f9f4f9079",
+    "dataset/rotulagem_propria/images/DJI_20261022150043_0180_D.JPG": "83659f7436df3c4734f6f7d7b91cd00348f3e0172fa0857b99ceb642db15abf5",
+    "dataset/labels/images/DJI_20261022150043_0180_D.txt": "4d46d8961ecee0c7834081870226bae9df2ee44ac6c9db4bd2156ea3d5d8c7d3",
+    "dataset/rotulagem_propria/images/DJI_20261022150043_0180_D.json": "9eb4a04b502a9c3cfe2c70815170c454f361ed995278674b0cc7932fb77bb54a",
+    "dataset/rotulagem_propria/images/DJI_20261022150137_0198_D.JPG": "52acfc0d4084ff08ee7f9f6487c5c1c48a8d215cb9e23910cc0917326fba98e5",
+    "dataset/labels/images/DJI_20261022150137_0198_D.txt": "65f3c1b69174cb9f04ef5c790df4c43b4583d451d205fb7fa7fb27f97b6dc9f4",
+    "dataset/rotulagem_propria/images/DJI_20261022150137_0198_D.json": "743dc659611079bc073f2ad6f0f8c1ee6437a81962e3699a730c1e1b87f9dcc5",
+    "dataset/rotulagem_propria/images/DJI_20261022150155_0204_D.JPG": "06e83a35d7a6f583b29faef17aa4e193dce9c1b6a29407c97a5b365c02a9d70d",
+    "dataset/labels/images/DJI_20261022150155_0204_D.txt": "727a23de7209a1547d3c58ff697dc0cd78ab5a813c2bf2f4b40c54747d8f8f8f",
+    "dataset/rotulagem_propria/images/DJI_20261022150155_0204_D.json": "3f835d2c51fb30acaee8dff2c0d094abb567aa82732d5bf5299806a131b5ffb4",
+    "dataset/rotulagem_propria/images/DJI_20261022150225_0214_D.JPG": "59b47e9c01a5835a72c18e157737421b65b070971bb435b35792150c1c90a046",
+    "dataset/labels/images/DJI_20261022150225_0214_D.txt": "387e5ae70fb48a18396bc0b90987996d3d9a856b359334467153b76974a2d81b",
+    "dataset/rotulagem_propria/images/DJI_20261022150225_0214_D.json": "07814abe0b0ea3dce584b8c80f056e54bafd8ab4f0e31f02d516d022877461ae",
+    "dataset/rotulagem_propria/images/DJI_20261022150307_0228_D.JPG": "b91c44363a6a61705f3185b13c613ad0f7e2c68a4d73734336605fad905eddac",
+    "dataset/labels/images/DJI_20261022150307_0228_D.txt": "cfdf3265db122840617047d3b8eb5e188136d555d7818a0ec1901158c5c09c5b",
+    "dataset/rotulagem_propria/images/DJI_20261022150307_0228_D.json": "a740e31821095a7e42d784ed71ba5307382a7b6850262ad83fe761e84eccf23d",
+    "runs/mvp_drone/weights/best.pt": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1"
+  },
+  "limitacoes": [
+    "Amostra de conveniencia de 10 fotos da mesma captura, nao representa todos os voos.",
+    "Referencia manual assistida por SAM; metricas dependem da revisao de todas as regioes visiveis.",
+    "Pequenas sobreposicoes da referencia foram preservadas, sem alterar os rotulos."
+  ],
+  "arquivos_originais_preservados": true,
+  "data_avaliacao": "2026-10-29"
+}
