@@ -1,0 +1,128 @@
+{
+  "modelo": "SAM 2.1 Hiera Tiny ONNX do X-AnyLabeling 4.2.2",
+  "imagens": [
+    "CEUPAZ2022_DJI_0005_x0500_y0400.png",
+    "CEUPAZ2022_DJI_0017_x1500_y0900.png",
+    "CEUPAZ2022_DJI_0022_x1800_y1000.png",
+    "CEUPAZ2022_DJI_0032_x2500_y1700.png",
+    "CEUPAZ2022_DJI_0043_x2000_y1800.png"
+  ],
+  "passagens_por_dispositivo": 3,
+  "consultas_por_dispositivo": 357,
+  "onnxruntime_original": "1.31.1 CPU (preservado)",
+  "runtime_do_teste": "1.27.0 GPU, usado também para baseline CPU",
+  "ganho_encoder_mediana": 10.069012169482559,
+  "ganho_decoder_mediana": 5.578780580615577,
+  "ganho_tempo_total_com_artefatos": 5.079993572276781,
+  "cpu": {
+    "device": "cpu",
+    "ort_version": "1.27.0",
+    "providers": {
+      "encoder": [
+        "CPUExecutionProvider"
+      ],
+      "decoder": [
+        "CPUExecutionProvider"
+      ]
+    },
+    "passes": 3,
+    "images": [
+      "CEUPAZ2022_DJI_0005_x0500_y0400.png",
+      "CEUPAZ2022_DJI_0017_x1500_y0900.png",
+      "CEUPAZ2022_DJI_0022_x1800_y1000.png",
+      "CEUPAZ2022_DJI_0032_x2500_y1700.png",
+      "CEUPAZ2022_DJI_0043_x2000_y1800.png"
+    ],
+    "cliques_medidos": 357,
+    "load_s": 0.22182455800020762,
+    "warmup_s": 1.4269319879999784,
+    "tempo_total_s_inclui_artefatos": 36.47115040499966,
+    "encoder_mediana_s": 1.3279274540000188,
+    "decoder_mediana_s": 0.044454685999880894,
+    "decoder_p95_s": 0.05565104880006402,
+    "memoria_picos_amostrados": {
+      "rss_bytes": 2345164800,
+      "gpu_process_mib": 0
+    },
+    "iou_medio_cpu_gpu": null,
+    "iou_minimo_cpu_gpu": null,
+    "iou_minimo_repeticoes": 1.0,
+    "originais_preservados": true,
+    "hashes_sha256": {
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0005_x0500_y0400.png": "706a1fb5aade474f46764a0869ff4919a906fd15b6906d22537c3db3f3abc5b4",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0017_x1500_y0900.png": "e71adcbf1a8c26c5d8f54de377ce53729c92d12d36d0098c0e7c5fe7d56d151f",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0022_x1800_y1000.png": "139d08c360f2db52e3154f2f79dd0a1396d60e2b9b0a819a60c981eef14ffc0c",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0032_x2500_y1700.png": "06a3e10f1078053946ba15430bf9498eafa47c51b66e67c72825799cbace1f4c",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0043_x2000_y1800.png": "67ca8b0c8ce29a546a8318d31d26eaf2a5ac257da26dd3f1a671035d23d5f6fe",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0005_x0500_y0400.json": "2632beb3f1154b8088c10877f49612646f08739c750c62a9adb38725dc0a99da",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0017_x1500_y0900.json": "7f935800c3db13b682331bc14aca36b93d347823fa3facb104ff7d2b9421f744",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0022_x1800_y1000.json": "3bb5093a343e7e4dfc0e61864b47709bae2490dd6610da25d8e67c889d22e289",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0032_x2500_y1700.json": "ec9a1db007296adbe301743a282188c602d566f12701933cb094b68280148277",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0043_x2000_y1800.json": "8afb56ec3e59c635ed5071cb118cdff14cb72f5eef35c0661066d4b9d078c529",
+      "/home/gustavobm/xanylabeling_data/models/sam2_hiera_tiny-r20240801/sam2.1_hiera_tiny.encoder.onnx": "53c36abb631cc60876f3ebe856a8d65b0a52f0cf8ecd24ccd8ee189e0f51e6cc",
+      "/home/gustavobm/xanylabeling_data/models/sam2_hiera_tiny-r20240801/sam2.1_hiera_tiny.decoder.onnx": "582ebdf008e5f27b788192322efdcd8c16dd87fa8e5739bba64d09a16b50d602",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/.venv/lib/python3.13/site-packages/anylabeling/services/auto_labeling/__base__/sam2.py": "1598de1aad9c4dddba497d04b6c668ee951ff0e1552b2d6f9c85aeb43f89d325"
+    },
+    "limites": "Teste do encoder/decoder instalado, sem GUI Qt. Prompts de anotações pendentes; não mede qualidade final nem revisão humana. CPU e GPU usam o mesmo ORT 1.27.0."
+  },
+  "gpu": {
+    "device": "gpu",
+    "ort_version": "1.27.0",
+    "providers": {
+      "encoder": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "decoder": [
+        "CUDAExecutionProvider",
+        "CPUExecutionProvider"
+      ]
+    },
+    "passes": 3,
+    "images": [
+      "CEUPAZ2022_DJI_0005_x0500_y0400.png",
+      "CEUPAZ2022_DJI_0017_x1500_y0900.png",
+      "CEUPAZ2022_DJI_0022_x1800_y1000.png",
+      "CEUPAZ2022_DJI_0032_x2500_y1700.png",
+      "CEUPAZ2022_DJI_0043_x2000_y1800.png"
+    ],
+    "cliques_medidos": 357,
+    "load_s": 0.3597633809999934,
+    "warmup_s": 0.5483335680000891,
+    "tempo_total_s_inclui_artefatos": 7.179369399999814,
+    "encoder_mediana_s": 0.1318825950002065,
+    "decoder_mediana_s": 0.007968531000187795,
+    "decoder_p95_s": 0.00920047639974655,
+    "memoria_picos_amostrados": {
+      "rss_bytes": 2066128896,
+      "gpu_process_mib": 2152
+    },
+    "iou_medio_cpu_gpu": 0.999576504811374,
+    "iou_minimo_cpu_gpu": 0.9943588630939466,
+    "iou_minimo_repeticoes": 1.0,
+    "originais_preservados": true,
+    "hashes_sha256": {
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0005_x0500_y0400.png": "706a1fb5aade474f46764a0869ff4919a906fd15b6906d22537c3db3f3abc5b4",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0017_x1500_y0900.png": "e71adcbf1a8c26c5d8f54de377ce53729c92d12d36d0098c0e7c5fe7d56d151f",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0022_x1800_y1000.png": "139d08c360f2db52e3154f2f79dd0a1396d60e2b9b0a819a60c981eef14ffc0c",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0032_x2500_y1700.png": "06a3e10f1078053946ba15430bf9498eafa47c51b66e67c72825799cbace1f4c",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0043_x2000_y1800.png": "67ca8b0c8ce29a546a8318d31d26eaf2a5ac257da26dd3f1a671035d23d5f6fe",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0005_x0500_y0400.json": "2632beb3f1154b8088c10877f49612646f08739c750c62a9adb38725dc0a99da",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0017_x1500_y0900.json": "7f935800c3db13b682331bc14aca36b93d347823fa3facb104ff7d2b9421f744",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0022_x1800_y1000.json": "3bb5093a343e7e4dfc0e61864b47709bae2490dd6610da25d8e67c889d22e289",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0032_x2500_y1700.json": "ec9a1db007296adbe301743a282188c602d566f12701933cb094b68280148277",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/dataset/rotulagem_ceu_paz/images/CEUPAZ2022_DJI_0043_x2000_y1800.json": "8afb56ec3e59c635ed5071cb118cdff14cb72f5eef35c0661066d4b9d078c529",
+      "/home/gustavobm/xanylabeling_data/models/sam2_hiera_tiny-r20240801/sam2.1_hiera_tiny.encoder.onnx": "53c36abb631cc60876f3ebe856a8d65b0a52f0cf8ecd24ccd8ee189e0f51e6cc",
+      "/home/gustavobm/xanylabeling_data/models/sam2_hiera_tiny-r20240801/sam2.1_hiera_tiny.decoder.onnx": "582ebdf008e5f27b788192322efdcd8c16dd87fa8e5739bba64d09a16b50d602",
+      "/home/gustavobm/Área de trabalho/treino-de-modelo/.venv/lib/python3.13/site-packages/anylabeling/services/auto_labeling/__base__/sam2.py": "1598de1aad9c4dddba497d04b6c668ee951ff0e1552b2d6f9c85aeb43f89d325"
+    },
+    "limites": "Teste do encoder/decoder instalado, sem GUI Qt. Prompts de anotações pendentes; não mede qualidade final nem revisão humana. CPU e GPU usam o mesmo ORT 1.27.0."
+  },
+  "dados_brutos": "runs/teste_sam2_5imagens_2026-11-02",
+  "limites": [
+    "Teste do encoder/decoder sem interface Qt; não comprova estabilidade de sessões longas ou do modo Segmentar tudo.",
+    "Prompts derivados de anotações pendentes; nenhuma avaliação de qualidade final ou revisão humana foi realizada.",
+    "RSS e VRAM são picos amostrados a cada aproximadamente 0,5 segundo.",
+    "Comparação entre CPU e GPU usa o mesmo runtime 1.27.0; a instalação original CPU 1.31.1 foi preservada."
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "data": "2026-11-02",
+  "selecionadas": [
+    "CEUPAZ2022_DJI_0005_x0500_y0400.png",
+    "CEUPAZ2022_DJI_0017_x1500_y0900.png",
+    "CEUPAZ2022_DJI_0022_x1800_y1000.png",
+    "CEUPAZ2022_DJI_0032_x2500_y1700.png",
+    "CEUPAZ2022_DJI_0043_x2000_y1800.png"
+  ],
+  "excluidas": [
+    "CEUPAZ2022_DJI_0054_x3200_y0600.png",
+    "CEUPAZ2022_DJI_0064_x3000_y1600.png",
+    "CEUPAZ2022_DJI_0074_x0500_y1300.png",
+    "CEUPAZ2022_DJI_0089_x2600_y1400.png",
+    "CEUPAZ2022_DJI_0102_x1400_y1600.png",
+    "CEUPAZ2022_DJI_0132_x1600_y1000.png",
+    "CEUPAZ2022_DJI_0148_x2000_y0700.png"
+  ],
+  "dataset": {
+    "train": 285,
+    "val": 80,
+    "test": 40
+  },
+  "poligonos_ceu_paz": 119,
+  "poligonos_total": 6434,
+  "configuracao": {
+    "data": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/dataset_ceu_paz_5/dataset.yaml",
+    "project": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs",
+    "name": "ceu_paz_5_finetune",
+    "exist_ok": false,
+    "epochs": 20,
+    "patience": 5,
+    "imgsz": 640,
+    "batch": 8,
+    "workers": 2,
+    "device": 0,
+    "amp": true,
+    "cache": false,
+    "optimizer": "AdamW",
+    "lr0": 0.0001,
+    "warmup_epochs": 1.0,
+    "warmup_bias_lr": 0.0001,
+    "seed": 0,
+    "deterministic": true,
+    "save": true,
+    "save_period": -1,
+    "plots": true
+  },
+  "smoke": {
+    "inicio": "2026-11-02T05:05:23.141343-03:00",
+    "configuracao": {
+      "data": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/dataset_ceu_paz_5/dataset.yaml",
+      "project": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs",
+      "name": "ceu_paz_5_finetune_smoke",
+      "exist_ok": false,
+      "epochs": 3,
+      "patience": 5,
+      "imgsz": 640,
+      "batch": 8,
+      "workers": 2,
+      "device": 0,
+      "amp": true,
+      "cache": false,
+      "optimizer": "AdamW",
+      "lr0": 0.0001,
+      "warmup_epochs": 1.0,
+      "warmup_bias_lr": 0.0001,
+      "seed": 0,
+      "deterministic": true,
+      "save": true,
+      "save_period": -1,
+      "plots": false
+    },
+    "pesos_origem": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/mvp_drone/weights/best.pt",
+    "pesos_origem_sha256": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1",
+    "amp_efetivo": true,
+    "batch_efetivo": 8,
+    "acumulacao_nominal": 8,
+    "lotes_por_epoca": 36,
+    "tempo_total_s_inclui_setup_e_avaliacao": 26.80980994299989,
+    "pesos_origem_preservados": true,
+    "saida": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/ceu_paz_5_finetune_smoke",
+    "metricas_finais": {
+      "metrics/precision(B)": 0.7367519636777472,
+      "metrics/recall(B)": 0.630650243995945,
+      "metrics/mAP50(B)": 0.6615757458598835,
+      "metrics/mAP50-95(B)": 0.4614302502686878,
+      "metrics/precision(M)": 0.7387712951271034,
+      "metrics/recall(M)": 0.5924844855561039,
+      "metrics/mAP50(M)": 0.620150060101297,
+      "metrics/mAP50-95(M)": 0.3714198035133463
+    }
+  },
+  "treino": {
+    "epocas_concluidas": 6,
+    "melhor_epoca_fitness": 1,
+    "tempo_csv_s": 52.3325,
+    "tempo_total_s": 63.493011479000415,
+    "imagens_por_s_efetivas_inclui_validacao": 32.675679549037405,
+    "early_stopping_patience": 5,
+    "amp_efetivo": true,
+    "resultados_por_epoca": [
+      {
+        "epoch": 1.0,
+        "time": 10.9793,
+        "train/box_loss": 0.77083,
+        "train/seg_loss": 1.5855,
+        "train/cls_loss": 0.628,
+        "train/dfl_loss": 0.99669,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.7187,
+        "metrics/recall(B)": 0.64128,
+        "metrics/mAP50(B)": 0.66366,
+        "metrics/mAP50-95(B)": 0.46502,
+        "metrics/precision(M)": 0.75137,
+        "metrics/recall(M)": 0.58485,
+        "metrics/mAP50(M)": 0.62113,
+        "metrics/mAP50-95(M)": 0.37121,
+        "val/box_loss": 1.13759,
+        "val/seg_loss": 2.25353,
+        "val/cls_loss": 1.04364,
+        "val/dfl_loss": 1.16935,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 9.72222e-05,
+        "lr/pg1": 9.72222e-05,
+        "lr/pg2": 0.0001
+      },
+      {
+        "epoch": 2.0,
+        "time": 19.2165,
+        "train/box_loss": 0.77324,
+        "train/seg_loss": 1.52622,
+        "train/cls_loss": 0.60335,
+        "train/dfl_loss": 0.98284,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.72922,
+        "metrics/recall(B)": 0.62918,
+        "metrics/mAP50(B)": 0.66297,
+        "metrics/mAP50-95(B)": 0.46148,
+        "metrics/precision(M)": 0.71272,
+        "metrics/recall(M)": 0.60421,
+        "metrics/mAP50(M)": 0.61477,
+        "metrics/mAP50-95(M)": 0.36543,
+        "val/box_loss": 1.14836,
+        "val/seg_loss": 2.23911,
+        "val/cls_loss": 1.0182,
+        "val/dfl_loss": 1.17249,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 9.505e-05,
+        "lr/pg1": 9.505e-05,
+        "lr/pg2": 9.505e-05
+      },
+      {
+        "epoch": 3.0,
+        "time": 27.3829,
+        "train/box_loss": 0.77183,
+        "train/seg_loss": 1.5613,
+        "train/cls_loss": 0.61947,
+        "train/dfl_loss": 0.99484,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.75845,
+        "metrics/recall(B)": 0.60607,
+        "metrics/mAP50(B)": 0.66078,
+        "metrics/mAP50-95(B)": 0.45653,
+        "metrics/precision(M)": 0.73552,
+        "metrics/recall(M)": 0.58864,
+        "metrics/mAP50(M)": 0.61488,
+        "metrics/mAP50-95(M)": 0.36194,
+        "val/box_loss": 1.16292,
+        "val/seg_loss": 2.24439,
+        "val/cls_loss": 1.00955,
+        "val/dfl_loss": 1.17272,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 9.01e-05,
+        "lr/pg1": 9.01e-05,
+        "lr/pg2": 9.01e-05
+      },
+      {
+        "epoch": 4.0,
+        "time": 35.6225,
+        "train/box_loss": 0.7539,
+        "train/seg_loss": 1.50229,
+        "train/cls_loss": 0.5808,
+        "train/dfl_loss": 0.98399,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.74105,
+        "metrics/recall(B)": 0.61653,
+        "metrics/mAP50(B)": 0.6635,
+        "metrics/mAP50-95(B)": 0.46051,
+        "metrics/precision(M)": 0.73956,
+        "metrics/recall(M)": 0.5749,
+        "metrics/mAP50(M)": 0.61707,
+        "metrics/mAP50-95(M)": 0.36623,
+        "val/box_loss": 1.1621,
+        "val/seg_loss": 2.23317,
+        "val/cls_loss": 1.00579,
+        "val/dfl_loss": 1.17458,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 8.515e-05,
+        "lr/pg1": 8.515e-05,
+        "lr/pg2": 8.515e-05
+      },
+      {
+        "epoch": 5.0,
+        "time": 43.9366,
+        "train/box_loss": 0.7505,
+        "train/seg_loss": 1.4851,
+        "train/cls_loss": 0.57387,
+        "train/dfl_loss": 0.9719,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.73524,
+        "metrics/recall(B)": 0.61206,
+        "metrics/mAP50(B)": 0.6648,
+        "metrics/mAP50-95(B)": 0.46116,
+        "metrics/precision(M)": 0.76083,
+        "metrics/recall(M)": 0.57538,
+        "metrics/mAP50(M)": 0.62126,
+        "metrics/mAP50-95(M)": 0.36748,
+        "val/box_loss": 1.15128,
+        "val/seg_loss": 2.23845,
+        "val/cls_loss": 1.01735,
+        "val/dfl_loss": 1.17065,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 8.02e-05,
+        "lr/pg1": 8.02e-05,
+        "lr/pg2": 8.02e-05
+      },
+      {
+        "epoch": 6.0,
+        "time": 52.3325,
+        "train/box_loss": 0.75374,
+        "train/seg_loss": 1.50178,
+        "train/cls_loss": 0.57822,
+        "train/dfl_loss": 0.96846,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.73774,
+        "metrics/recall(B)": 0.63409,
+        "metrics/mAP50(B)": 0.6661,
+        "metrics/mAP50-95(B)": 0.4635,
+        "metrics/precision(M)": 0.71358,
+        "metrics/recall(M)": 0.60957,
+        "metrics/mAP50(M)": 0.62353,
+        "metrics/mAP50-95(M)": 0.36896,
+        "val/box_loss": 1.14854,
+        "val/seg_loss": 2.24471,
+        "val/cls_loss": 1.01919,
+        "val/dfl_loss": 1.16931,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 7.525e-05,
+        "lr/pg1": 7.525e-05,
+        "lr/pg2": 7.525e-05
+      }
+    ],
+    "validacao_final_best": {
+      "metrics/precision(B)": 0.718221417814687,
+      "metrics/recall(B)": 0.6419395858370711,
+      "metrics/mAP50(B)": 0.6636529469393452,
+      "metrics/mAP50-95(B)": 0.4654077184835115,
+      "metrics/precision(M)": 0.7522879233132805,
+      "metrics/recall(M)": 0.5861419112259189,
+      "metrics/mAP50(M)": 0.6219194922151282,
+      "metrics/mAP50-95(M)": 0.3718576450393737
+    }
+  },
+  "gpu_amostragem_global": {
+    "amostras": 59,
+    "utilizacao_media_percentual": 74.66101694915254,
+    "utilizacao_max_percentual": 100.0,
+    "memoria_max_MiB": 4398.0
+  },
+  "comparacao": {
+    "teste_semantic_drone": {
+      "imagens": 40,
+      "mIoU_anterior": 0.8931443282259787,
+      "mIoU_candidato": 0.8905494947286717,
+      "delta_mIoU_pontos_percentuais": -0.25948334973069365,
+      "mDice_anterior": 0.9431900628827901,
+      "mDice_candidato": 0.9417427438933452,
+      "por_classe": {
+        "construcao": {
+          "anterior": {
+            "iou": 0.8436994510000903,
+            "dice": 0.915224496641724
+          },
+          "candidato": {
+            "iou": 0.8414833935207648,
+            "dice": 0.9139190681615844
+          }
+        },
+        "vegetacao": {
+          "anterior": {
+            "iou": 0.9153144179053222,
+            "dice": 0.9557850234389746
+          },
+          "candidato": {
+            "iou": 0.911329339828971,
+            "dice": 0.9536078590312628
+          }
+        },
+        "via": {
+          "anterior": {
+            "iou": 0.9204191157725234,
+            "dice": 0.9585606685676716
+          },
+          "candidato": {
+            "iou": 0.9188357508362793,
+            "dice": 0.9577013044871886
+          }
+        }
+      }
+    },
+    "fotos_proprias": {
+      "imagens": 10,
+      "mIoU_anterior": 0.5175799674976019,
+      "mIoU_candidato": 0.5893117413932275,
+      "delta_mIoU_pontos_percentuais": 7.173177389562557,
+      "mDice_anterior": 0.6757494027674348,
+      "mDice_candidato": 0.7342823622665539,
+      "por_classe": {
+        "construcao": {
+          "anterior": {
+            "iou": 0.5255216389397883,
+            "dice": 0.688973037845621
+          },
+          "candidato": {
+            "iou": 0.7332688087784291,
+            "dice": 0.8461108918185879
+          }
+        },
+        "vegetacao": {
+          "anterior": {
+            "iou": 0.6416075256804563,
+            "dice": 0.7816819984600231
+          },
+          "candidato": {
+            "iou": 0.595749166337426,
+            "dice": 0.7466701896574303
+          }
+        },
+        "via": {
+          "anterior": {
+            "iou": 0.3856107378725611,
+            "dice": 0.5565931719966606
+          },
+          "candidato": {
+            "iou": 0.43891724906382745,
+            "dice": 0.6100660053236432
+          }
+        }
+      }
+    },
+    "ceu_paz_treino": {
+      "imagens": 5,
+      "mIoU_anterior": 0.35579982490409306,
+      "mIoU_candidato": 0.38664056717638146,
+      "delta_mIoU_pontos_percentuais": 3.084074227228839,
+      "mDice_anterior": 0.4581906073494156,
+      "mDice_candidato": 0.5050927734822431,
+      "por_classe": {
+        "construcao": {
+          "anterior": {
+            "iou": 0.09019566446308092,
+            "dice": 0.1654669292920039
+          },
+          "candidato": {
+            "iou": 0.17430608500787836,
+            "dice": 0.29686652778727435
+          }
+        },
+        "vegetacao": {
+          "anterior": {
+            "iou": 0.7756974298436013,
+            "dice": 0.8736819874903156
+          },
+          "candidato": {
+            "iou": 0.7787739813346363,
+            "dice": 0.8756300570017473
+          }
+        },
+        "via": {
+          "anterior": {
+            "iou": 0.20150638040559704,
+            "dice": 0.33542290526592755
+          },
+          "candidato": {
+            "iou": 0.20684163518662968,
+            "dice": 0.342781735657708
+          }
+        }
+      }
+    }
+  },
+  "pesos_anterior": "runs/mvp_drone/weights/best.pt",
+  "pesos_anterior_sha256": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1",
+  "pesos_candidato": "runs/ceu_paz_5_finetune/weights/best.pt",
+  "pesos_candidato_sha256": "24eec0ab6ed7d5d6d82f8e456db1ae983e34f5e12a43fb527efd2842299a0053",
+  "originais_e_copias_conferidos_por_hash": true,
+  "modelo_padrao_alterado": false,
+  "limites": [
+    "Cinco CEU Paz são treino, não avaliação independente.",
+    "Dez fotos próprias são diagnóstico de um mesmo voo já consultado.",
+    "Vegetação nas fotos próprias e mIoU no teste antigo regrediram.",
+    "Rótulos antigos reconstruídos; comparação usa os mesmos arquivos em ambos os modelos."
+  ]
+}

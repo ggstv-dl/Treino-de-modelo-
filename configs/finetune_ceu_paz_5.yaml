@@ -1,0 +1,24 @@
+# Executar: .venv/bin/python scripts/treinar_ceu_paz.py
+# Saídas novas; nenhum checkpoint de runs/mvp_drone é substituído.
+model: runs/mvp_drone/weights/best.pt
+data: runs/dataset_ceu_paz_5/dataset.yaml
+project: runs
+name: ceu_paz_5_finetune
+exist_ok: false
+epochs: 20
+patience: 5
+imgsz: 640
+batch: 8
+workers: 2
+device: 0
+amp: true
+cache: false
+optimizer: AdamW
+lr0: 0.0001
+warmup_epochs: 1.0
+warmup_bias_lr: 0.0001
+seed: 0
+deterministic: true
+save: true
+save_period: -1
+plots: true

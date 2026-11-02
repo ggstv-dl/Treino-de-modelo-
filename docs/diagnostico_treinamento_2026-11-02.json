@@ -1,0 +1,394 @@
+{
+  "data": "2026-11-02T02:06:54.847191-03:00",
+  "prazo": "2026-11-04T23:59:00-03:00",
+  "hashes_baseline_conferidos": 31,
+  "torch": "2.14.1+cu130",
+  "cuda_build": "13.0",
+  "cuda_disponivel": false,
+  "treino_executado": false,
+  "historico": {
+    "epocas": 100,
+    "total_s": 21165.5,
+    "media_epoca_s": 211.655,
+    "mediana_epoca_s": 212.69999999999982,
+    "media_ultimas10_s": 201.17999999999992,
+    "mAP50_95_mask_max_epoca": 87.0,
+    "epocas_selecionadas": [
+      {
+        "epoch": 1.0,
+        "time": 210.387,
+        "train/box_loss": 1.4361,
+        "train/seg_loss": 3.57408,
+        "train/cls_loss": 2.22163,
+        "train/dfl_loss": 1.4406,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.32753,
+        "metrics/recall(B)": 0.3121,
+        "metrics/mAP50(B)": 0.20171,
+        "metrics/mAP50-95(B)": 0.09921,
+        "metrics/precision(M)": 0.30559,
+        "metrics/recall(M)": 0.2905,
+        "metrics/mAP50(M)": 0.18817,
+        "metrics/mAP50-95(M)": 0.08666,
+        "val/box_loss": 1.73279,
+        "val/seg_loss": 3.50827,
+        "val/cls_loss": 4.03967,
+        "val/dfl_loss": 1.53443,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000462724,
+        "lr/pg1": 0.000462724,
+        "lr/pg2": 0.000462724
+      },
+      {
+        "epoch": 20.0,
+        "time": 4239.71,
+        "train/box_loss": 1.13135,
+        "train/seg_loss": 2.2885,
+        "train/cls_loss": 1.09068,
+        "train/dfl_loss": 1.1921,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.62092,
+        "metrics/recall(B)": 0.48286,
+        "metrics/mAP50(B)": 0.50456,
+        "metrics/mAP50-95(B)": 0.32891,
+        "metrics/precision(M)": 0.63305,
+        "metrics/recall(M)": 0.42553,
+        "metrics/mAP50(M)": 0.45083,
+        "metrics/mAP50-95(M)": 0.24781,
+        "val/box_loss": 1.32237,
+        "val/seg_loss": 2.51278,
+        "val/cls_loss": 1.33453,
+        "val/dfl_loss": 1.25404,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.00116021,
+        "lr/pg1": 0.00116021,
+        "lr/pg2": 0.00116021
+      },
+      {
+        "epoch": 50.0,
+        "time": 10635.3,
+        "train/box_loss": 0.93764,
+        "train/seg_loss": 1.83979,
+        "train/cls_loss": 0.78372,
+        "train/dfl_loss": 1.06251,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.7281,
+        "metrics/recall(B)": 0.56499,
+        "metrics/mAP50(B)": 0.61674,
+        "metrics/mAP50-95(B)": 0.40679,
+        "metrics/precision(M)": 0.70421,
+        "metrics/recall(M)": 0.54955,
+        "metrics/mAP50(M)": 0.57324,
+        "metrics/mAP50-95(M)": 0.32758,
+        "val/box_loss": 1.23445,
+        "val/seg_loss": 2.36791,
+        "val/cls_loss": 1.11155,
+        "val/dfl_loss": 1.19886,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000735792,
+        "lr/pg1": 0.000735792,
+        "lr/pg2": 0.000735792
+      },
+      {
+        "epoch": 60.0,
+        "time": 12771.6,
+        "train/box_loss": 0.88867,
+        "train/seg_loss": 1.70425,
+        "train/cls_loss": 0.7015,
+        "train/dfl_loss": 1.0361,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.69632,
+        "metrics/recall(B)": 0.59893,
+        "metrics/mAP50(B)": 0.64275,
+        "metrics/mAP50-95(B)": 0.43381,
+        "metrics/precision(M)": 0.73487,
+        "metrics/recall(M)": 0.55218,
+        "metrics/mAP50(M)": 0.60484,
+        "metrics/mAP50-95(M)": 0.34898,
+        "val/box_loss": 1.19216,
+        "val/seg_loss": 2.29472,
+        "val/cls_loss": 1.07792,
+        "val/dfl_loss": 1.18692,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000594321,
+        "lr/pg1": 0.000594321,
+        "lr/pg2": 0.000594321
+      },
+      {
+        "epoch": 70.0,
+        "time": 14902.0,
+        "train/box_loss": 0.82847,
+        "train/seg_loss": 1.62519,
+        "train/cls_loss": 0.65615,
+        "train/dfl_loss": 1.00673,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.73616,
+        "metrics/recall(B)": 0.57841,
+        "metrics/mAP50(B)": 0.63545,
+        "metrics/mAP50-95(B)": 0.42622,
+        "metrics/precision(M)": 0.72096,
+        "metrics/recall(M)": 0.56794,
+        "metrics/mAP50(M)": 0.59281,
+        "metrics/mAP50-95(M)": 0.34053,
+        "val/box_loss": 1.19054,
+        "val/seg_loss": 2.26678,
+        "val/cls_loss": 1.05734,
+        "val/dfl_loss": 1.1863,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.00045285,
+        "lr/pg1": 0.00045285,
+        "lr/pg2": 0.00045285
+      },
+      {
+        "epoch": 80.0,
+        "time": 17025.5,
+        "train/box_loss": 0.80361,
+        "train/seg_loss": 1.5273,
+        "train/cls_loss": 0.6074,
+        "train/dfl_loss": 0.99439,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.71663,
+        "metrics/recall(B)": 0.62058,
+        "metrics/mAP50(B)": 0.6657,
+        "metrics/mAP50-95(B)": 0.46099,
+        "metrics/precision(M)": 0.68888,
+        "metrics/recall(M)": 0.59764,
+        "metrics/mAP50(M)": 0.61246,
+        "metrics/mAP50-95(M)": 0.36448,
+        "val/box_loss": 1.16962,
+        "val/seg_loss": 2.2544,
+        "val/cls_loss": 1.00733,
+        "val/dfl_loss": 1.16759,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000311379,
+        "lr/pg1": 0.000311379,
+        "lr/pg2": 0.000311379
+      },
+      {
+        "epoch": 87.0,
+        "time": 18517.1,
+        "train/box_loss": 0.77671,
+        "train/seg_loss": 1.47645,
+        "train/cls_loss": 0.57634,
+        "train/dfl_loss": 0.96803,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.72527,
+        "metrics/recall(B)": 0.61958,
+        "metrics/mAP50(B)": 0.6623,
+        "metrics/mAP50-95(B)": 0.45204,
+        "metrics/precision(M)": 0.73025,
+        "metrics/recall(M)": 0.5938,
+        "metrics/mAP50(M)": 0.62016,
+        "metrics/mAP50-95(M)": 0.37149,
+        "val/box_loss": 1.18051,
+        "val/seg_loss": 2.30607,
+        "val/cls_loss": 1.03301,
+        "val/dfl_loss": 1.17106,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000212349,
+        "lr/pg1": 0.000212349,
+        "lr/pg2": 0.000212349
+      },
+      {
+        "epoch": 90.0,
+        "time": 19153.7,
+        "train/box_loss": 0.7589,
+        "train/seg_loss": 1.46038,
+        "train/cls_loss": 0.56095,
+        "train/dfl_loss": 0.97916,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.75999,
+        "metrics/recall(B)": 0.60672,
+        "metrics/mAP50(B)": 0.66346,
+        "metrics/mAP50-95(B)": 0.46084,
+        "metrics/precision(M)": 0.75027,
+        "metrics/recall(M)": 0.59153,
+        "metrics/mAP50(M)": 0.62375,
+        "metrics/mAP50-95(M)": 0.36662,
+        "val/box_loss": 1.15616,
+        "val/seg_loss": 2.29971,
+        "val/cls_loss": 1.01551,
+        "val/dfl_loss": 1.16616,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 0.000169908,
+        "lr/pg1": 0.000169908,
+        "lr/pg2": 0.000169908
+      },
+      {
+        "epoch": 100.0,
+        "time": 21165.5,
+        "train/box_loss": 0.75874,
+        "train/seg_loss": 1.39708,
+        "train/cls_loss": 0.54013,
+        "train/dfl_loss": 0.96253,
+        "train/sem_loss": 0.0,
+        "metrics/precision(B)": 0.72676,
+        "metrics/recall(B)": 0.62142,
+        "metrics/mAP50(B)": 0.66068,
+        "metrics/mAP50-95(B)": 0.46349,
+        "metrics/precision(M)": 0.73772,
+        "metrics/recall(M)": 0.59242,
+        "metrics/mAP50(M)": 0.62272,
+        "metrics/mAP50-95(M)": 0.36979,
+        "val/box_loss": 1.14636,
+        "val/seg_loss": 2.34958,
+        "val/cls_loss": 1.00368,
+        "val/dfl_loss": 1.17202,
+        "val/sem_loss": 0.0,
+        "lr/pg0": 2.84371e-05,
+        "lr/pg1": 2.84371e-05,
+        "lr/pg2": 2.84371e-05
+      }
+    ]
+  },
+  "dataset": {
+    "dataset/images/train": {
+      "imagens": 280,
+      "bytes": 92773071,
+      "dimensoes": {
+        "(1024, 682)": 280
+      },
+      "rotulos_ausentes": 280
+    },
+    "dataset/images/val": {
+      "imagens": 80,
+      "bytes": 26293441,
+      "dimensoes": {
+        "(1024, 682)": 80
+      },
+      "rotulos_ausentes": 80
+    },
+    "dataset/images/test": {
+      "imagens": 40,
+      "bytes": 13518799,
+      "dimensoes": {
+        "(1024, 682)": 40
+      },
+      "rotulos_ausentes": 40
+    },
+    "dataset/rotulagem_propria/images": {
+      "imagens": 10,
+      "bytes": 80175104,
+      "dimensoes": {
+        "(4032, 2268)": 10
+      }
+    },
+    "dataset/rotulagem_ceu_paz/images": {
+      "imagens": 12,
+      "bytes": 51829313,
+      "dimensoes": {
+        "(1536, 1536)": 12
+      }
+    }
+  },
+  "duplicatas_binarias": [],
+  "reavaliacao": {
+    "device": "cpu",
+    "threads": 2,
+    "imagens": 10,
+    "poligonos": {
+      "0": 92,
+      "1": 72,
+      "2": 12
+    },
+    "imgsz": 640,
+    "conf": 0.25,
+    "inicializacao_e_warmup_s": 1.9770257780000975,
+    "avaliacao_s": 9.687371490999794,
+    "imagens_por_s_inclui_metricas": 1.032271758060549,
+    "por_classe": {
+      "construcao": {
+        "iou": 0.5255744251833684,
+        "dice": 0.6890184005545272
+      },
+      "vegetacao": {
+        "iou": 0.6415471072016147,
+        "dice": 0.7816371572732697
+      },
+      "via": {
+        "iou": 0.38598362585733986,
+        "dice": 0.5569815092419705
+      }
+    },
+    "mIoU": 0.5177017194141077,
+    "mDice": 0.6758790223565891,
+    "delta_mIoU_vs_29out": 1.3122640973861621e-08,
+    "delta_mDice_vs_29out": 1.36626535640616e-08,
+    "por_imagem": [
+      {
+        "imagem": "DJI_20261022145716_0111_D.JPG",
+        "segundos": 0.8946557889998985
+      },
+      {
+        "imagem": "DJI_20261022145855_0144_D.JPG",
+        "segundos": 1.6138315749999492
+      },
+      {
+        "imagem": "DJI_20261022145931_0156_D.JPG",
+        "segundos": 0.7122683100001268
+      },
+      {
+        "imagem": "DJI_20261022145955_0164_D.JPG",
+        "segundos": 0.8228580019999754
+      },
+      {
+        "imagem": "DJI_20261022150013_0170_D.JPG",
+        "segundos": 1.7415984550002577
+      },
+      {
+        "imagem": "DJI_20261022150043_0180_D.JPG",
+        "segundos": 0.937517299999854
+      },
+      {
+        "imagem": "DJI_20261022150137_0198_D.JPG",
+        "segundos": 0.9664593580000655
+      },
+      {
+        "imagem": "DJI_20261022150155_0204_D.JPG",
+        "segundos": 0.5961391900000308
+      },
+      {
+        "imagem": "DJI_20261022150225_0214_D.JPG",
+        "segundos": 0.7152810769998723
+      },
+      {
+        "imagem": "DJI_20261022150307_0228_D.JPG",
+        "segundos": 0.6862938100002793
+      }
+    ]
+  },
+  "originais_preservados": true,
+  "hashes_sha256": {
+    "dataset/rotulagem_propria/images/DJI_20261022145716_0111_D.JPG": "916f44af6ba91d52def0870ce23106bb687cd44ac941a263d1325ac5c96dd411",
+    "dataset/labels/images/DJI_20261022145716_0111_D.txt": "0b6f7bf059cfa4e47893c61dee6cde5e5f652424aa8291f05f43d207ba049c3d",
+    "dataset/rotulagem_propria/images/DJI_20261022145716_0111_D.json": "d1110a4f99ff27bbcc68c2fadcf995509dd3004c1657782395ec2cc3442d2cf3",
+    "dataset/rotulagem_propria/images/DJI_20261022145855_0144_D.JPG": "63538372703a236f72426b9216e29e8bff14dd247c8f1c8d7bc24858a752eb34",
+    "dataset/labels/images/DJI_20261022145855_0144_D.txt": "4789945d414d5e2771a220c8f668f5d26b7d721a4ae06ca42d3ee8638e802212",
+    "dataset/rotulagem_propria/images/DJI_20261022145855_0144_D.json": "c17a1d66e3ffcf466f01059bb7f7f64de2ff0a1863f7c54c9f41d9c1dd574feb",
+    "dataset/rotulagem_propria/images/DJI_20261022145931_0156_D.JPG": "05c60b7319f062a4134764a0404992fdbc94479a5753845d334c39e25077cb81",
+    "dataset/labels/images/DJI_20261022145931_0156_D.txt": "3fc5b13af346c1466ba431dafaa83b171067041a204e1557f8314b481df306eb",
+    "dataset/rotulagem_propria/images/DJI_20261022145931_0156_D.json": "1f5f5dacaf0341858fe0b2532cc35c8406a13e9a6901cb60ed21333a65f343c1",
+    "dataset/rotulagem_propria/images/DJI_20261022145955_0164_D.JPG": "329969e38bd43c8735c288a582e7d3e73ae00b27dd9ef626120a543c115b910e",
+    "dataset/labels/images/DJI_20261022145955_0164_D.txt": "456bc029c157bc5be5a546629a6233b4748f32f7e190d9c5ee0d1d6db6c4fc41",
+    "dataset/rotulagem_propria/images/DJI_20261022145955_0164_D.json": "7f37fdda3e3c5b90f7bc369218290fa1d457ddc959fe08835a0b70c0ac69c9f6",
+    "dataset/rotulagem_propria/images/DJI_20261022150013_0170_D.JPG": "55b29c7134f2f91a533b95e88cf2aa56d616cb5e6d884dc81a68bfc7d0f20ed1",
+    "dataset/labels/images/DJI_20261022150013_0170_D.txt": "8d0eb7e75b89003dd1fb3bb70509ee479a1f51d68f460c7efe9d3f41d5843675",
+    "dataset/rotulagem_propria/images/DJI_20261022150013_0170_D.json": "01faf562b074b0728dc220be3040a6e1468424d250bb08b7b2508c1f9f4f9079",
+    "dataset/rotulagem_propria/images/DJI_20261022150043_0180_D.JPG": "83659f7436df3c4734f6f7d7b91cd00348f3e0172fa0857b99ceb642db15abf5",
+    "dataset/labels/images/DJI_20261022150043_0180_D.txt": "4d46d8961ecee0c7834081870226bae9df2ee44ac6c9db4bd2156ea3d5d8c7d3",
+    "dataset/rotulagem_propria/images/DJI_20261022150043_0180_D.json": "9eb4a04b502a9c3cfe2c70815170c454f361ed995278674b0cc7932fb77bb54a",
+    "dataset/rotulagem_propria/images/DJI_20261022150137_0198_D.JPG": "52acfc0d4084ff08ee7f9f6487c5c1c48a8d215cb9e23910cc0917326fba98e5",
+    "dataset/labels/images/DJI_20261022150137_0198_D.txt": "65f3c1b69174cb9f04ef5c790df4c43b4583d451d205fb7fa7fb27f97b6dc9f4",
+    "dataset/rotulagem_propria/images/DJI_20261022150137_0198_D.json": "743dc659611079bc073f2ad6f0f8c1ee6437a81962e3699a730c1e1b87f9dcc5",
+    "dataset/rotulagem_propria/images/DJI_20261022150155_0204_D.JPG": "06e83a35d7a6f583b29faef17aa4e193dce9c1b6a29407c97a5b365c02a9d70d",
+    "dataset/labels/images/DJI_20261022150155_0204_D.txt": "727a23de7209a1547d3c58ff697dc0cd78ab5a813c2bf2f4b40c54747d8f8f8f",
+    "dataset/rotulagem_propria/images/DJI_20261022150155_0204_D.json": "3f835d2c51fb30acaee8dff2c0d094abb567aa82732d5bf5299806a131b5ffb4",
+    "dataset/rotulagem_propria/images/DJI_20261022150225_0214_D.JPG": "59b47e9c01a5835a72c18e157737421b65b070971bb435b35792150c1c90a046",
+    "dataset/labels/images/DJI_20261022150225_0214_D.txt": "387e5ae70fb48a18396bc0b90987996d3d9a856b359334467153b76974a2d81b",
+    "dataset/rotulagem_propria/images/DJI_20261022150225_0214_D.json": "07814abe0b0ea3dce584b8c80f056e54bafd8ab4f0e31f02d516d022877461ae",
+    "dataset/rotulagem_propria/images/DJI_20261022150307_0228_D.JPG": "b91c44363a6a61705f3185b13c613ad0f7e2c68a4d73734336605fad905eddac",
+    "dataset/labels/images/DJI_20261022150307_0228_D.txt": "cfdf3265db122840617047d3b8eb5e188136d555d7818a0ec1901158c5c09c5b",
+    "dataset/rotulagem_propria/images/DJI_20261022150307_0228_D.json": "a740e31821095a7e42d784ed71ba5307382a7b6850262ad83fe761e84eccf23d",
+    "runs/mvp_drone/weights/best.pt": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1"
+  }
+}
