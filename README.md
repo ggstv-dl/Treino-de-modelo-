@@ -115,3 +115,25 @@ estão no [relatório da avaliação](docs/avaliacao_fotos_proprias.md).
 - [ ] Treino principal
 - [ ] Métricas de validação
 - [ ] Integração com o bot do Telegram
+
+## Bot do Telegram
+
+Crie um bot conversando com o **@BotFather** no Telegram e guarde o token em um
+arquivo `.env` local, usando `.env.example` como modelo. Preencha
+`TELEGRAM_BOT_TOKEN` e, para usar o treino parcial, defina
+`MODEL_WEIGHTS=runs/mvp_drone_parcial/weights/best.pt`. Se `MODEL_WEIGHTS` ficar
+vazio, serão usados os pesos padrão de `src.config`. O `.env` está no `.gitignore`;
+nunca inclua seu token em mensagens, logs ou commits.
+
+Com a `.venv` ativa, instale as dependências e inicie:
+
+```bash
+pip install -r requirements.txt
+python -m src.bot
+```
+
+Envie `/start` ou `/ajuda` ao bot e depois uma foto de drone. Para preservar a
+resolução, envie a imagem como documento JPG ou PNG. O bot devolve a imagem
+anotada e os percentuais de área por classe. Esses percentuais são relativos à
+imagem, não medidas em metros quadrados. O processo precisa permanecer ativo
+para responder às mensagens.
