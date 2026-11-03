@@ -18,7 +18,10 @@ O usuário final vai interagir com o modelo por um bot do Telegram (repositório
     ├── config.py       # constantes e caminhos compartilhados
     ├── train.py        # treino
     ├── evaluate.py     # IoU e Dice por classe
-    └── predict.py      # inferência (função analisar(), usada pelo bot)
+    ├── predict.py      # inferência (função analisar(), usada pelo bot)
+    ├── validar_dataset.py   # conferência de imagens e polígonos
+    ├── selecionar_imagens.py # seleção das fotos próprias
+    └── bot.py          # bot assíncrono do Telegram
 ```
 
 ## Instalação
@@ -62,10 +65,45 @@ python -m src.preparar_dataset --imagens CAMINHO/images --mascaras CAMINHO/masks
 
 O agrupamento de classes (por exemplo, `roof` e `wall` viram `construcao`) fica na constante
 `MAPEAMENTO` do script e precisa usar os mesmos nomes do `dataset.yaml`.
+`--sobrescrever` refaz somente `images/{train,val,test}` e `labels/{train,val,test}`;
+splits extras, como `test_proprio`, são preservados. Confira os dados antes de refazer.
 
 ### Imagens próprias
 
 Rotulagem no [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling), exportando em YOLO-seg.
+
+Prepare uma seleção a partir de uma pasta local (a busca inclui suas subpastas):
+
+```bash
+python -m src.selecionar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_proprio \
+    --n-teste 40 --n-reserva 60 --lado-maior 1024 --limiar-duplicata 6 --seed 42
+```
+
+O script descarta os 10% menos nítidos e quase-duplicatas por dHash, agrupa capturas
+em voos por intervalos maiores que dez minutos e seleciona imagens diversas por cor
+e dHash. Prefere voos diferentes para teste e reserva; o relatório informa qualquer
+compartilhamento e insuficiência de imagens. Sem data EXIF, usa mtime, que deve ser
+conferido antes de interpretar os grupos como voos reais. A saída deve estar vazia.
+
+Os JPEGs ficam em `teste_para_rotular/` e `reserva_treino/`, com nomes sequenciais;
+`mapeamento.csv` relaciona originais, novos nomes, datas e voos. O relatório fica em
+`relatorio_selecao.md`. O OpenCV grava JPEG qualidade 95 com lado maior de até 1024 px
+e remove os metadados EXIF, inclusive GPS. Os originais são preservados.
+Essas fotos e seus rótulos ficam fora do Git. A reserva não deve ser incorporada ao
+teste após ajustes de modelo.
+
+Depois de rotular o teste, copie os pares para `dataset/images/test_proprio/` e
+`dataset/labels/test_proprio/`, sem misturá-los ao treino, e valide:
+
+```bash
+python -m src.validar_dataset                     # todos os splits em dataset/images
+python -m src.validar_dataset --split test_proprio
+python -m src.validar_dataset --split val test
+```
+
+O validador verifica pares, classes, polígonos normalizados e imagens repetidas
+entre splits por nome ou conteúdo. Imprime contagens por classe e retorna código
+diferente de zero se houver erro; rótulos vazios são contados e permitidos.
 
 ## Uso
 
@@ -86,6 +124,27 @@ python -m src.predict foto.jpg
 ```
 
 Os pesos finais ficam em `runs/mvp_drone/weights/best.pt`. Use `--pesos` para apontar outro arquivo.
+
+O experimento antigo `mvp_drone` foi preservado. O treino principal desta etapa usa
+um nome explícito; informe também os pesos explicitamente na avaliação e inferência:
+
+```bash
+python -m src.train --nome mvp_drone_principal --epochs 50 --patience 20 --batch 8
+python -m src.train --nome mvp_drone_principal --retomar
+python -m src.evaluate --split test_proprio --pesos runs/mvp_drone_principal/weights/best.pt
+python -m src.predict foto.jpg --pesos runs/mvp_drone_principal/weights/best.pt
+```
+
+`--retomar` exige `runs/<nome>/weights/last.pt` e continua com `resume=True`, usando
+os parâmetros e o total de épocas salvos no checkpoint. Não combina com
+`--teste-rapido` e não serve para acrescentar épocas a um treino já concluído.
+No Colab, preserve toda a pasta do experimento no Drive e restaure-a em `runs/<nome>/`
+antes de retomar, junto com o dataset nos caminhos do treino original.
+
+`evaluate --split` aceita nomes livres: usa o caminho de imagens do `dataset.yaml`
+quando definido; caso contrário, procura `dataset/images/<split>`. Splits extras
+usam rótulos em `dataset/labels/<split>`. Se a pasta não existir, o erro lista os
+splits disponíveis. Os caminhos e o comportamento de `train`, `val` e `test` permanecem iguais.
 
 Uso no código (por exemplo, no bot):
 
@@ -111,10 +170,13 @@ estão no [relatório da avaliação](docs/avaliacao_fotos_proprias.md).
 
 - [x] Pipeline de treino, avaliação e inferência
 - [x] Script de preparação do dataset
-- [ ] Dataset gerado e conferido
-- [ ] Treino principal
-- [ ] Métricas de validação
-- [ ] Integração com o bot do Telegram
+- [x] Dataset gerado e conferido (280 treino, 80 validação, 40 teste)
+- [x] Treino parcial de 25 épocas e métricas de validação/teste registradas
+- [ ] Treino principal concluído (50 épocas solicitadas; experimento `mvp_drone_principal` iniciado)
+- [x] Validação estrutural, splits adicionais, retomada e seleção de fotos próprias
+- [x] Bot do Telegram implementado
+- [ ] Teste ao vivo do bot e correção da pendência de arquivo inválido (`pi-heif`)
+- [ ] Rotulagem e avaliação do conjunto `test_proprio`
 
 ## Bot do Telegram
 
@@ -124,6 +186,8 @@ arquivo `.env` local, usando `.env.example` como modelo. Preencha
 `MODEL_WEIGHTS=runs/mvp_drone_parcial/weights/best.pt`. Se `MODEL_WEIGHTS` ficar
 vazio, serão usados os pesos padrão de `src.config`. O `.env` está no `.gitignore`;
 nunca inclua seu token em mensagens, logs ou commits.
+Para o treino principal, após existir o checkpoint, use
+`MODEL_WEIGHTS=runs/mvp_drone_principal/weights/best.pt`.
 
 Com a `.venv` ativa, instale as dependências e inicie:
 
