@@ -65,10 +65,28 @@ def calcular_metricas(inter, soma_pred, soma_gt, nomes):
     return resultado
 
 
+def resolver_pastas(cfg, split):
+    """Resolve imagens do YAML ou de images/<split>, mantendo os splits originais."""
+    raiz = Path(cfg["path"])
+    pasta_imagens = raiz / cfg.get(split, f"images/{split}")
+    if split in {"train", "val", "test"} and split in cfg:
+        pasta_rotulos = raiz / cfg[split].replace("images", "labels")
+    else:
+        pasta_rotulos = raiz / "labels" / split
+    if not pasta_imagens.is_dir():
+        base = raiz / "images"
+        disponiveis = sorted(p.name for p in base.iterdir() if p.is_dir()) if base.is_dir() else []
+        raise FileNotFoundError(
+            f"Pasta de imagens não encontrada: {pasta_imagens}. "
+            f"Splits disponíveis em images/: {', '.join(disponiveis) or '(nenhum)'}"
+        )
+    return pasta_imagens, pasta_rotulos
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--pesos", default=str(config.PESOS_PADRAO))
-    p.add_argument("--split", default="test", choices=["train", "val", "test"])
+    p.add_argument("--split", default="test", help="nome do split, inclusive test_proprio")
     p.add_argument("--conf", type=float, default=config.CONF)
     p.add_argument("--imgsz", type=int, default=config.IMGSZ)
     p.add_argument("--json", help="caminho para salvar as métricas em JSON")
@@ -78,10 +96,7 @@ def main():
     nomes = cfg["names"]
     nc = len(nomes)
 
-    pasta_imagens = Path(cfg["path"]) / cfg[args.split]
-    pasta_rotulos = Path(cfg["path"]) / cfg[args.split].replace("images", "labels")
-    if not pasta_imagens.exists():
-        raise FileNotFoundError(f"Pasta de imagens não encontrada: {pasta_imagens}")
+    pasta_imagens, pasta_rotulos = resolver_pastas(cfg, args.split)
     if not Path(args.pesos).exists():
         raise FileNotFoundError(f"Pesos não encontrados: {args.pesos}")
 
