@@ -24,6 +24,7 @@ def criar_parser():
     p.add_argument("--patience", type=int, default=20, help="para sozinho se parar de melhorar")
     p.add_argument("--workers", type=int, default=2)
     p.add_argument("--nome", default=config.NOME_EXPERIMENTO)
+    p.add_argument("--retomar", action="store_true", help="retoma runs/<nome>/weights/last.pt com os parâmetros salvos")
     p.add_argument("--teste-rapido", action="store_true", help="3 épocas em 20%% dos dados (teste de fumaça)")
     return p
 
@@ -43,6 +44,16 @@ def gravar_yaml_resolvido():
 
 def main():
     args = criar_parser().parse_args()
+
+    if args.retomar:
+        if args.teste_rapido:
+            raise ValueError("--retomar não pode ser combinado com --teste-rapido.")
+        checkpoint = config.RUNS_DIR / args.nome / "weights" / "last.pt"
+        if not checkpoint.is_file():
+            raise FileNotFoundError(f"Não é possível retomar: checkpoint não encontrado em {checkpoint}")
+        YOLO(str(checkpoint)).train(resume=True)
+        print(f"Pesos finais: {checkpoint.parent / 'best.pt'}")
+        return
 
     opcoes = {}
     if args.teste_rapido:
