@@ -223,7 +223,7 @@ def main():
     p.add_argument("--area-min", type=float, default=0.0005, help="área mínima de um polígono, fração da imagem (padrão: %(default)s)")
     p.add_argument("--epsilon", type=float, default=0.002, help="simplificação das regiões sem buracos, fração do perímetro (padrão: %(default)s)")
     p.add_argument("--manter-vazias", action="store_true", help="mantém imagens sem nenhum polígono (como fundo puro)")
-    p.add_argument("--sobrescrever", action="store_true", help="apaga images/ e labels/ da saída antes de gerar")
+    p.add_argument("--sobrescrever", action="store_true", help="refaz somente train/val/test, preservando splits extras")
     p.add_argument("--inspecionar", action="store_true", help="só mostra o que foi entendido, sem gravar nada")
     args = p.parse_args()
 
@@ -244,12 +244,15 @@ def main():
         return
 
     saida = Path(args.saida)
-    for sub in ("images", "labels"):
-        pasta = saida / sub
-        if pasta.exists() and any(pasta.rglob("*.*")):
-            if not args.sobrescrever:
-                raise FileExistsError(f"{pasta} já tem arquivos. Use --sobrescrever para refazer.")
-            shutil.rmtree(pasta)
+    pastas = [saida / sub / split for sub in ("images", "labels") for split in ("train", "val", "test")]
+    # Conferir todas antes de apagar evita uma saída parcialmente removida.
+    for pasta in pastas:
+        if pasta.exists() and any(p.is_file() for p in pasta.rglob("*")) and not args.sobrescrever:
+            raise FileExistsError(f"{pasta} já tem arquivos. Use --sobrescrever para refazer.")
+    if args.sobrescrever:
+        for pasta in pastas:
+            if pasta.exists():
+                shutil.rmtree(pasta)
 
     random.Random(args.seed).shuffle(pares)
     n = len(pares)
