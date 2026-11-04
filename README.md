@@ -105,6 +105,55 @@ O validador verifica pares, classes, polígonos normalizados e imagens repetidas
 entre splits por nome ou conteúdo. Imprime contagens por classe e retorna código
 diferente de zero se houver erro; rótulos vazios são contados e permitidos.
 
+## Limpeza das imagens do drone
+
+Para limpar todas as fotos antes de selecionar ou rotular, use uma pasta de saída
+separada. A busca inclui subpastas e os originais são somente lidos. Comece pela simulação:
+
+```bash
+python -m src.limpar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_limpo_1024 --simular
+```
+
+Confira `relatorio_limpeza.md`, `descartadas.csv`, `montagem_descartadas.jpg` e
+`montagem_mantidas.jpg`. Se o descarte total superar 30% ou um motivo superar 15%,
+interrompa e revise os resultados antes de autorizar a gravação ou alterar limiares.
+Depois de aprovar a simulação, execute sem `--simular`:
+
+```bash
+python -m src.limpar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_limpo_1024 \
+    --lado-maior 1024 --qualidade 95 --limiar-borrao 0.35 \
+    --limiar-duplicata 5 --lado-minimo 640 --workers 4 --seed 42
+```
+
+As etapas são aplicadas nesta ordem:
+
+1. Leitura com Pillow, correção da orientação EXIF e conversão para RGB; arquivos
+   corrompidos recebem o motivo `ilegivel`.
+2. Descarte de imagens com qualquer lado menor que 640 px (`muito_pequena`).
+3. Média de cinza menor que 25 ou maior que 235 (`exposicao`), seguida de desvio
+   padrão menor que 10 (`sem_conteudo`). Assim, uma imagem branca é exposição.
+4. Variância do Laplaciano calculada após reduzir o lado maior para até 1024 px,
+   sem ampliar e independentemente de `--lado-maior`. O limite de desfoque é
+   `--limiar-borrao` vezes a mediana das imagens que passaram nas etapas anteriores;
+   valores abaixo do limite recebem `borrada`.
+5. Comparação de dHash de 64 bits com todas as fotos mantidas: distância de Hamming
+   até 5 indica `duplicata`. As mais nítidas têm prioridade; o CSV informa a cópia mantida.
+6. Redução com INTER_AREA para lado maior de até 1024 px, sem ampliar, e JPEG qualidade 95.
+   A gravação **remove EXIF, inclusive GPS**, dos arquivos finais.
+7. Ordenação por DateTimeOriginal do EXIF ou mtime, com desempate pelo nome original,
+   e nomes contínuos `drone_0001.jpg`, `drone_0002.jpg` etc.
+
+`--workers` controla os processos de leitura e gravação; os pixels são liberados a
+cada imagem e apenas metadados permanecem na memória principal. O progresso aparece
+a cada 25 fotos. `--seed` torna determinísticas as amostras das montagens.
+
+A simulação grava somente CSVs, relatório e montagens, sem os JPEGs individuais.
+O mapeamento contém nomes e dimensões planejados; os bytes finais ficam vazios.
+Os relatórios da simulação podem ser reutilizados na execução real na mesma pasta.
+JPEGs individuais e arquivos desconhecidos já existentes bloqueiam a execução;
+nenhuma imagem é sobrescrita. Registre a contagem e a soma dos bytes dos originais
+em `_antes.txt` e confira novamente ao final. Mantenha fotos e relatórios fora do Git.
+
 ## Uso
 
 Execute sempre a partir da raiz do repositório:
