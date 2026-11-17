@@ -17,6 +17,10 @@ resultado*.jpg
 
 # Segredos (token do bot do Telegram etc.)
 .env
+.env.*
+!.env.example
+.env.local
+models/*.pt
 
 # Editor / SO
 .vscode/

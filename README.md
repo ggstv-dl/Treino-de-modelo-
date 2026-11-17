@@ -229,24 +229,43 @@ estão no [relatório da avaliação](docs/avaliacao_fotos_proprias.md).
 
 ## Bot do Telegram
 
-Crie um bot conversando com o **@BotFather** no Telegram e guarde o token em um
-arquivo `.env` local, usando `.env.example` como modelo. Preencha
-`TELEGRAM_BOT_TOKEN` e, para usar o treino parcial, defina
-`MODEL_WEIGHTS=runs/mvp_drone_parcial/weights/best.pt`. Se `MODEL_WEIGHTS` ficar
-vazio, serão usados os pesos padrão de `src.config`. O `.env` está no `.gitignore`;
-nunca inclua seu token em mensagens, logs ou commits.
-Para o treino principal, após existir o checkpoint, use
-`MODEL_WEIGHTS=runs/mvp_drone_principal/weights/best.pt`.
+Crie o bot no **@BotFather** com `/newbot` e um username terminado em `bot`.
+Copie `.env.example` para `.env` e preencha `TELEGRAM_BOT_TOKEN` no editor.
+Nunca cole o token em chat, terminal, prints ou commits. O `.env` é ignorado pelo Git.
 
-Com a `.venv` ativa, instale as dependências e inicie:
+O padrão é o P3 aprovado em `models/mvp_final.pt`; a identificação, o SHA-256 e as
+métricas estão em [models/MODELO.md](models/MODELO.md). Os pesos devem existir
+localmente e não são versionados. `MODEL_WEIGHTS` é opcional: vazio usa o padrão;
+preenchido aponta para outro checkpoint (caminhos relativos partem da raiz).
+Reinicie o bot após trocar pesos ou configuração. A configuração carrega o `.env`
+antes de resolver os pesos, também para `predict` e `evaluate`.
+
+Com a `.venv` ativa:
 
 ```bash
 pip install -r requirements.txt
+python -m src.bot --verificar
 python -m src.bot
 ```
 
-Envie `/start` ou `/ajuda` ao bot e depois uma foto de drone. Para preservar a
-resolução, envie a imagem como documento JPG ou PNG. O bot devolve a imagem
-anotada e os percentuais de área por classe. Esses percentuais são relativos à
-imagem, não medidas em metros quadrados. O processo precisa permanecer ativo
-para responder às mensagens.
+`--verificar` consulta o nome do bot uma vez e encerra; o último comando mantém o
+processo ativo até **Ctrl+C**. O teste ao vivo deve ser feito manualmente.
+Envie `/start` ou `/ajuda`, depois uma foto aérea de drone, ou JPG/PNG como
+**ARQUIVO** para preservar a resolução. Classes: construção, vegetação e via.
+A resposta contém imagem anotada e percentuais de pixels, uma estimativa do
+modelo, sem conversão para metros quadrados. Outros ângulos podem gerar erros.
+
+São aceitos JPG/PNG válidos, com cada lado de pelo menos 64 pixels e até 20 MB.
+Arquivos inválidos, falhas de download e ausência de pesos geram orientação;
+arquivos temporários são removidos ao final. **HEIC não é suportado**: `pi-heif`
+não é uma dependência do bot. O fallback opcional do Ultralytics para HEIC ao
+abrir arquivos inválidos é tratado sem exigir esse pacote.
+
+Execute a suíte offline (imagens sintéticas e stubs, sem rede, token real ou GPU):
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Para avaliar modelos, passe sempre `--pesos` explicitamente, por exemplo
+`python -m src.evaluate --pesos models/mvp_final.pt --split test`.
