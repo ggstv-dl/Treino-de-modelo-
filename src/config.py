@@ -3,9 +3,11 @@
 Todos os caminhos são relativos à raiz do repositório, então os scripts
 funcionam independentemente da pasta de onde são executados.
 """
+import os
 from pathlib import Path
 
 import yaml
+from dotenv import load_dotenv
 
 RAIZ = Path(__file__).resolve().parent.parent
 DATASET_YAML = RAIZ / "dataset.yaml"
@@ -13,7 +15,18 @@ RUNS_DIR = RAIZ / "runs"
 
 NOME_EXPERIMENTO = "mvp_drone"
 MODELO_BASE = "yolo11s-seg.pt"  # baixa sozinho na 1ª execução; alternativa leve: yolo11n-seg.pt
-PESOS_PADRAO = RUNS_DIR / NOME_EXPERIMENTO / "weights" / "best.pt"
+# Carregar antes de resolver MODEL_WEIGHTS também atende predict e evaluate.
+load_dotenv(RAIZ / ".env", override=False)
+
+
+def resolver_pesos(pesos=None):
+    """Resolve pesos explícitos, MODEL_WEIGHTS ou o checkpoint aprovado do MVP."""
+    escolhido = pesos if pesos is not None else os.environ.get("MODEL_WEIGHTS", "").strip()
+    caminho = Path(escolhido).expanduser() if escolhido else RAIZ / "models" / "mvp_final.pt"
+    return caminho if caminho.is_absolute() else RAIZ / caminho
+
+
+PESOS_PADRAO = resolver_pesos()
 
 IMGSZ = 640
 CONF = 0.25
