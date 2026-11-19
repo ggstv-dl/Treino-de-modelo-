@@ -5,3 +5,8 @@ pyyaml>=6.0
 pillow>=10.0
 python-telegram-bot>=21.0
 python-dotenv>=1.0
+
+# torch é dependência do Ultralytics; escolha a build CPU/CUDA conforme o hardware.
+# Opcional para gerar os gráficos de análise externos: matplotlib>=3.11
+# Opcional para análises estatísticas externas: scipy>=1.18
+# pi-heif não é necessário: o bot aceita somente JPG/PNG e o teste HEIC é opcional.
