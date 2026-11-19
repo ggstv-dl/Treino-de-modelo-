@@ -1,271 +1,175 @@
-# Treino de modelo: análise de imagens de drone
+# Segmentação de imagens de drone — TED UNIBALSAS
 
-Modelo de segmentação (YOLO11-seg) que identifica elementos específicos em imagens
-capturadas por drones (VANTs). Faz parte do MVP do Trabalho Efetivo Discente de
-Análise e Desenvolvimento de Sistemas, UNIBALSAS.
+## Visão geral
 
-O usuário final vai interagir com o modelo por um bot do Telegram (repositório
-[Geo_Map](https://github.com/HugoAlexandreCarvalho/Geo_Map)).
+Atividades de mapeamento e topografia podem exigir identificação manual de elementos em imagens aéreas, um processo custoso e sujeito a erro. Este projeto implementa um MVP de segmentação de construções, vegetação e vias com YOLO11-seg, integrado a um bot do Telegram que devolve imagem anotada e percentuais de pixels por classe.
 
-## Estrutura
+O trabalho integra o TED de Análise e Desenvolvimento de Sistemas da UNIBALSAS. O pipeline, o bot e os testes estão implementados; operação ao vivo, consentimento para divulgação das fotos e validação por especialista ainda precisam de comprovação.
 
-```
+## Resultados
+
+Valores da avaliação de 18/11/2026 em [docs/resultados/numeros_para_o_relatorio.json](docs/resultados/numeros_para_o_relatorio.json). Os intervalos usam bootstrap pareado de imagens, não voos independentes.
+
+### P3 — fotos próprias
+
+| Split | Imagens | mIoU [IC95%] | mDice [IC95%] |
+|---|---:|---|---|
+| val | 70 | 80,5010% [78,7895%–82,0177%] | 89,1452% [88,0460%–90,0889%] |
+| test | 42 | 75,0540% [70,7962%–78,9450%] | 85,5980% [82,5191%–88,1660%] |
+
+Modelo P3, SHA8 `0189c556`; chaves `p3_val.*`, `p3_test.*` e `comparacao_*.metricas.*.B`.
+
+### Baseline — principal público nas mesmas fotos próprias
+
+| Split | Imagens | mIoU [IC95%] | mDice [IC95%] |
+|---|---:|---|---|
+| val | 70 | 45,4536% [42,9338%–48,0171%] | 60,8805% [58,3306%–63,3901%] |
+| test | 42 | 47,6342% [43,4130%–51,7222%] | 64,3075% [60,2844%–67,8816%] |
+
+Principal público, SHA8 `0692f705`; chaves `principal_proprio_*` e `comparacao_*.metricas.*.A`. Seu treino público foi concluído; não é o treino P3.
+
+| Split | P3 − baseline em mIoU (p.p.) [IC95%] | P3 − baseline em mDice (p.p.) [IC95%] |
+|---|---|---|
+| val | 35,0475 [32,8428–37,3505] | 28,2648 [26,0116–30,7234] |
+| test | 27,4198 [23,3001–32,0620] | 21,2905 [17,9868–25,1531] |
+
+**Comparações só valem dentro do mesmo conjunto.** IoU/Dice medem concordância com os rótulos disponíveis, pré-anotados por SAM e corrigidos no CVAT, não verdade de campo validada por especialista. O test é separado por local/sessão, mas não é um voo independente. Não foi escolhido limiar, checkpoint ou configuração pelo test. Consulte [tabelas, fontes e limitações](docs/resultados/).
+
+## Demonstração
+
+- [PREENCHER: link do bot ou da demo].
+- [PREENCHER: link do vídeo].
+
+## Estrutura do repositório
+
+```text
 .
-├── dataset.yaml        # classes e caminhos do dataset
+├── dataset.yaml             # classes e caminhos do dataset local
 ├── requirements.txt
-├── dataset/            # imagens e rótulos (não versionados)
-└── src/
-    ├── config.py       # constantes e caminhos compartilhados
-    ├── train.py        # treino
-    ├── evaluate.py     # IoU e Dice por classe
-    ├── predict.py      # inferência (função analisar(), usada pelo bot)
-    ├── validar_dataset.py   # conferência de imagens e polígonos
-    ├── selecionar_imagens.py # seleção das fotos próprias
-    └── bot.py          # bot assíncrono do Telegram
+├── .env.example             # campos vazios, sem credenciais
+├── src/                     # preparo, treino, avaliação, inferência e bot
+├── tests/                   # unittest com imagens sintéticas e stubs
+├── models/MODELO.md         # identificação do P3; pesos fora do Git
+├── docs/                    # fluxo, ambiente, créditos e diagnósticos históricos
+│   ├── resultados/          # fonte numérica e tabelas
+│   └── figuras/             # gráficos sem fotos
+├── scripts/                 # roteiros históricos, identificadores anonimizados
+├── configs/                 # configuração do experimento histórico
+└── dataset/.gitkeep          # só marcador; imagens e rótulos não versionados
 ```
 
 ## Instalação
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Dataset
-
-Formato YOLO-seg, uma imagem e um `.txt` homônimo:
-
-```
-dataset/
-  images/train  images/val  images/test
-  labels/train  labels/val  labels/test
-```
-
-Cada linha do `.txt` é um polígono normalizado: `<id_da_classe> x1 y1 x2 y2 ... xn yn`.
-As classes ficam em `dataset.yaml` (a ordem define o id; não altere depois de rotular).
-Rotulagem no [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling), exportando em YOLO-seg.
-### Gerando o dataset a partir do Semantic Drone Dataset
-
-Baixe o [Semantic Drone Dataset](https://www.kaggle.com/datasets/awsaf49/semantic-drone-dataset)
-(imagens, máscaras e `class_dict.csv`). Primeiro confira se o script entende o download
-(não grava nada):
-
-```bash
-python -m src.preparar_dataset --imagens CAMINHO/images --mascaras CAMINHO/masks \
-    --class-dict CAMINHO/class_dict.csv --inspecionar
-```
-
-Depois gere o dataset (redimensiona, agrupa as classes, converte em polígonos e divide 70/20/10 por imagem):
-
-```bash
-python -m src.preparar_dataset --imagens CAMINHO/images --mascaras CAMINHO/masks \
-    --class-dict CAMINHO/class_dict.csv
-```
-
-O agrupamento de classes (por exemplo, `roof` e `wall` viram `construcao`) fica na constante
-`MAPEAMENTO` do script e precisa usar os mesmos nomes do `dataset.yaml`.
-`--sobrescrever` refaz somente `images/{train,val,test}` e `labels/{train,val,test}`;
-splits extras, como `test_proprio`, são preservados. Confira os dados antes de refazer.
-
-### Imagens próprias
-
-Rotulagem no [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling), exportando em YOLO-seg.
-
-Prepare uma seleção a partir de uma pasta local (a busca inclui suas subpastas):
-
-```bash
-python -m src.selecionar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_proprio \
-    --n-teste 40 --n-reserva 60 --lado-maior 1024 --limiar-duplicata 6 --seed 42
-```
-
-O script descarta os 10% menos nítidos e quase-duplicatas por dHash, agrupa capturas
-em voos por intervalos maiores que dez minutos e seleciona imagens diversas por cor
-e dHash. Prefere voos diferentes para teste e reserva; o relatório informa qualquer
-compartilhamento e insuficiência de imagens. Sem data EXIF, usa mtime, que deve ser
-conferido antes de interpretar os grupos como voos reais. A saída deve estar vazia.
-
-Os JPEGs ficam em `teste_para_rotular/` e `reserva_treino/`, com nomes sequenciais;
-`mapeamento.csv` relaciona originais, novos nomes, datas e voos. O relatório fica em
-`relatorio_selecao.md`. O OpenCV grava JPEG qualidade 95 com lado maior de até 1024 px
-e remove os metadados EXIF, inclusive GPS. Os originais são preservados.
-Essas fotos e seus rótulos ficam fora do Git. A reserva não deve ser incorporada ao
-teste após ajustes de modelo.
-
-Depois de rotular o teste, copie os pares para `dataset/images/test_proprio/` e
-`dataset/labels/test_proprio/`, sem misturá-los ao treino, e valide:
-
-```bash
-python -m src.validar_dataset                     # todos os splits em dataset/images
-python -m src.validar_dataset --split test_proprio
-python -m src.validar_dataset --split val test
-```
-
-O validador verifica pares, classes, polígonos normalizados e imagens repetidas
-entre splits por nome ou conteúdo. Imprime contagens por classe e retorna código
-diferente de zero se houver erro; rótulos vazios são contados e permitidos.
-
-## Limpeza das imagens do drone
-
-Para limpar todas as fotos antes de selecionar ou rotular, use uma pasta de saída
-separada. A busca inclui subpastas e os originais são somente lidos. Comece pela simulação:
-
-```bash
-python -m src.limpar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_limpo_1024 --simular
-```
-
-Confira `relatorio_limpeza.md`, `descartadas.csv`, `montagem_descartadas.jpg` e
-`montagem_mantidas.jpg`. Se o descarte total superar 30% ou um motivo superar 15%,
-interrompa e revise os resultados antes de autorizar a gravação ou alterar limiares.
-Depois de aprovar a simulação, execute sem `--simular`:
-
-```bash
-python -m src.limpar_imagens --origem PASTA_DAS_FOTOS --saida ~/dados/drone_limpo_1024 \
-    --lado-maior 1024 --qualidade 95 --limiar-borrao 0.35 \
-    --limiar-duplicata 5 --lado-minimo 640 --workers 4 --seed 42
-```
-
-As etapas são aplicadas nesta ordem:
-
-1. Leitura com Pillow, correção da orientação EXIF e conversão para RGB; arquivos
-   corrompidos recebem o motivo `ilegivel`.
-2. Descarte de imagens com qualquer lado menor que 640 px (`muito_pequena`).
-3. Média de cinza menor que 25 ou maior que 235 (`exposicao`), seguida de desvio
-   padrão menor que 10 (`sem_conteudo`). Assim, uma imagem branca é exposição.
-4. Variância do Laplaciano calculada após reduzir o lado maior para até 1024 px,
-   sem ampliar e independentemente de `--lado-maior`. O limite de desfoque é
-   `--limiar-borrao` vezes a mediana das imagens que passaram nas etapas anteriores;
-   valores abaixo do limite recebem `borrada`.
-5. Comparação de dHash de 64 bits com todas as fotos mantidas: distância de Hamming
-   até 5 indica `duplicata`. As mais nítidas têm prioridade; o CSV informa a cópia mantida.
-6. Redução com INTER_AREA para lado maior de até 1024 px, sem ampliar, e JPEG qualidade 95.
-   A gravação **remove EXIF, inclusive GPS**, dos arquivos finais.
-7. Ordenação por DateTimeOriginal do EXIF ou mtime, com desempate pelo nome original,
-   e nomes contínuos `drone_0001.jpg`, `drone_0002.jpg` etc.
-
-`--workers` controla os processos de leitura e gravação; os pixels são liberados a
-cada imagem e apenas metadados permanecem na memória principal. O progresso aparece
-a cada 25 fotos. `--seed` torna determinísticas as amostras das montagens.
-
-A simulação grava somente CSVs, relatório e montagens, sem os JPEGs individuais.
-O mapeamento contém nomes e dimensões planejados; os bytes finais ficam vazios.
-Os relatórios da simulação podem ser reutilizados na execução real na mesma pasta.
-JPEGs individuais e arquivos desconhecidos já existentes bloqueiam a execução;
-nenhuma imagem é sobrescrita. Registre a contagem e a soma dos bytes dos originais
-em `_antes.txt` e confira novamente ao final. Mantenha fotos e relatórios fora do Git.
+No Windows, ativar com `.venv\Scripts\activate`. A build de torch deve ser adequada à CPU/GPU da máquina; não há versão de torch ou CUDA fixada pelo projeto. Para repetir o ambiente de teste, consulte [AMBIENTE_TESTADO.md](docs/AMBIENTE_TESTADO.md). Instalar dependências não fornece dados privados nem checkpoints.
 
 ## Uso
 
-Execute sempre a partir da raiz do repositório:
+Execute na raiz, com a `.venv` ativa. Os caminhos abaixo são exemplos locais; prepare suas próprias pastas autorizadas. Os comandos de treino não foram executados nesta revisão.
+
+### Inferência
 
 ```bash
-# 1. Teste de fumaça: 3 épocas em 20% dos dados, só para validar o pipeline
-python -m src.train --teste-rapido
-
-# 2. Treino completo (se der erro de memória: --batch 4 ou --modelo yolo11n-seg.pt)
-python -m src.train
-
-# 3. Métricas no conjunto de teste (ou --split val)
-python -m src.evaluate --json metricas.json
-
-# 4. Inferência em uma imagem
-python -m src.predict foto.jpg
+python -m src.predict foto.jpg --pesos models/mvp_final.pt --saida resultado.jpg --conf 0.25 --imgsz 640
 ```
 
-Os pesos finais ficam em `runs/mvp_drone/weights/best.pt`. Use `--pesos` para apontar outro arquivo.
+`predict.analisar` retorna caminho anotado e percentuais da imagem; não calcula metros quadrados. `--pesos`, `--conf` e `--imgsz` permitem indicar o protocolo explicitamente.
 
-O experimento antigo `mvp_drone` foi preservado. O treino principal desta etapa usa
-um nome explícito; informe também os pesos explicitamente na avaliação e inferência:
+### Avaliação
 
 ```bash
-python -m src.train --nome mvp_drone_principal --epochs 50 --patience 20 --batch 8
-python -m src.train --nome mvp_drone_principal --retomar
-python -m src.evaluate --split test_proprio --pesos runs/mvp_drone_principal/weights/best.pt
-python -m src.predict foto.jpg --pesos runs/mvp_drone_principal/weights/best.pt
+python -m src.evaluate --pesos models/mvp_final.pt --split val --json RESULTADOS/metricas_val.json --conf 0.25 --imgsz 640
 ```
 
-`--retomar` exige `runs/<nome>/weights/last.pt` e continua com `resume=True`, usando
-os parâmetros e o total de épocas salvos no checkpoint. Não combina com
-`--teste-rapido` e não serve para acrescentar épocas a um treino já concluído.
-No Colab, preserve toda a pasta do experimento no Drive e restaure-a em `runs/<nome>/`
-antes de retomar, junto com o dataset nos caminhos do treino original.
+Passe sempre `--pesos`. O avaliador usa as pastas do `dataset.yaml`; `--split` também aceita nomes extras, como `test_proprio`. Para o pacote privado P3 externo ao dataset padrão, use as pastas explícitas de `analise_erros avaliar`. Não copie fotos de treino para testar o modelo.
 
-`evaluate --split` aceita nomes livres: usa o caminho de imagens do `dataset.yaml`
-quando definido; caso contrário, procura `dataset/images/<split>`. Splits extras
-usam rótulos em `dataset/labels/<split>`. Se a pasta não existir, o erro lista os
-splits disponíveis. Os caminhos e o comportamento de `train`, `val` e `test` permanecem iguais.
-
-Uso no código (por exemplo, no bot):
-
-```python
-from src.predict import analisar
-
-caminho_imagem, areas = analisar("foto.jpg")   # areas = {"vegetacao": 42.1, ...} em % da imagem
-```
-
-## Métricas
-
-- **IoU** = |A∩B| / |A∪B|
-- **Dice** = 2|A∩B| / (|A|+|B|)
-
-Calculadas por classe, com os pixels de todo o split acumulados (métrica global),
-e reportadas também como média entre classes (mIoU / mDice).
-
-Na avaliação de 10 fotos próprias em 29/10/2026, o modelo obteve **mIoU de
-51,77% e mDice de 67,59%**. Os parâmetros, resultados por classe e limitações
-estão no [relatório da avaliação](docs/avaliacao_fotos_proprias.md).
-
-## Status
-
-- [x] Pipeline de treino, avaliação e inferência
-- [x] Script de preparação do dataset
-- [x] Dataset gerado e conferido (280 treino, 80 validação, 40 teste)
-- [x] Treino parcial de 25 épocas e métricas de validação/teste registradas
-- [ ] Treino principal concluído (50 épocas solicitadas; experimento `mvp_drone_principal` iniciado)
-- [x] Validação estrutural, splits adicionais, retomada e seleção de fotos próprias
-- [x] Bot do Telegram implementado
-- [ ] Teste ao vivo do bot e correção da pendência de arquivo inválido (`pi-heif`)
-- [ ] Rotulagem e avaliação do conjunto `test_proprio`
-
-## Bot do Telegram
-
-Crie o bot no **@BotFather** com `/newbot` e um username terminado em `bot`.
-Copie `.env.example` para `.env` e preencha `TELEGRAM_BOT_TOKEN` no editor.
-Nunca cole o token em chat, terminal, prints ou commits. O `.env` é ignorado pelo Git.
-
-O padrão é o P3 aprovado em `models/mvp_final.pt`; a identificação, o SHA-256 e as
-métricas estão em [models/MODELO.md](models/MODELO.md). Os pesos devem existir
-localmente e não são versionados. `MODEL_WEIGHTS` é opcional: vazio usa o padrão;
-preenchido aponta para outro checkpoint (caminhos relativos partem da raiz).
-Reinicie o bot após trocar pesos ou configuração. A configuração carrega o `.env`
-antes de resolver os pesos, também para `predict` e `evaluate`.
-
-Com a `.venv` ativa:
+### Análise por pixel e comparação pareada
 
 ```bash
-pip install -r requirements.txt
+python -m src.analise_erros avaliar --pesos models/mvp_final.pt --imagens DADOS_P3/images/val --rotulos DADOS_P3/labels/val --saida RESULTADOS/p3_val --imgsz 640 --conf 0.25 --grupos DADOS_P3/sanidade_divisao.json
+python -m src.analise_erros comparar --a RESULTADOS/baseline_val --b RESULTADOS/p3_val --saida RESULTADOS/comparacao_val --n-boot 2000 --seed 42
+```
+
+Avalie previamente o baseline nas mesmas imagens/rótulos para obter `RESULTADOS/baseline_val`. A comparação aborta para listas diferentes. O agrupamento usa o JSON e, quando necessário, `selecao.csv` adjacente. O mapa de locais reais fica somente na pasta local de evidências, em `resultados_finais/scripts/mapa_locais_INTERNO.csv`, e não deve ser publicado. A matriz exclui pixels com sobreposição entre classes e registra a fração ambígua; IoU/Dice mantêm o protocolo de união de áreas.
+
+### Treino
+
+```bash
+python -m src.train --nome experimento_local --epochs 50 --patience 20 --batch 4 --imgsz 640
+python -m src.train --nome experimento_local --retomar
+```
+
+`src.train` usa o dataset do projeto; não é o lançador externo original do P3. `--modelo` escolhe os pesos pré-treinados. `--retomar` exige `runs/<nome>/weights/last.pt` e preserva o plano salvo; não acrescenta épocas a um treino concluído. Use um nome novo para novos experimentos.
+
+### Bot do Telegram
+
+Crie um bot no @BotFather e copie `.env.example` para `.env` no editor. Preencha `TELEGRAM_BOT_TOKEN` somente nesse arquivo local. `MODEL_WEIGHTS` é opcional: vazio usa `models/mvp_final.pt`; caminhos relativos partem da raiz. Nunca cole tokens em chat, comandos, prints ou commits.
+
+```bash
 python -m src.bot --verificar
 python -m src.bot
 ```
 
-`--verificar` consulta o nome do bot uma vez e encerra; o último comando mantém o
-processo ativo até **Ctrl+C**. O teste ao vivo deve ser feito manualmente.
-Envie `/start` ou `/ajuda`, depois uma foto aérea de drone, ou JPG/PNG como
-**ARQUIVO** para preservar a resolução. Classes: construção, vegetação e via.
-A resposta contém imagem anotada e percentuais de pixels, uma estimativa do
-modelo, sem conversão para metros quadrados. Outros ângulos podem gerar erros.
+`--verificar` faz uma consulta ao nome do bot e encerra. O segundo comando mantém o processo ativo até Ctrl+C; sua execução e as conversas ao vivo dependem do responsável. `/start` e `/ajuda` orientam a enviar uma foto aérea ou JPG/PNG como arquivo. Os resultados são estimativas; outros ângulos podem produzir erros. O bot rejeita arquivos inválidos, acima de seu limite e imagens muito pequenas. HEIC não é suportado.
 
-São aceitos JPG/PNG válidos, com cada lado de pelo menos 64 pixels e até 20 MB.
-Arquivos inválidos, falhas de download e ausência de pesos geram orientação;
-arquivos temporários são removidos ao final. **HEIC não é suportado**: `pi-heif`
-não é uma dependência do bot. O fallback opcional do Ultralytics para HEIC ao
-abrir arquivos inválidos é tratado sem exigir esse pacote.
+## Modelo
 
-Execute a suíte offline (imagens sintéticas e stubs, sem rede, token real ou GPU):
+Consulte [models/MODELO.md](models/MODELO.md) para SHA-256, métricas, limitações e substituição. **Pesos não estão no Git.**
+
+[PREENCHER: link dos pesos]. A publicação depende da decisão do responsável sobre licenças e condições de uso.
+
+## Dados
+
+Para usar o Semantic Drone Dataset, obter imagens, máscaras e dicionário de classes na fonte oficial/Kaggle e conferir as restrições de licença. Não redistribuir o dataset nem presumir autorização comercial. As fotos próprias são privadas e não são distribuídas.
+
+```bash
+python -m src.preparar_dataset --imagens DADOS_PUBLICOS/images --mascaras DADOS_PUBLICOS/masks --class-dict DADOS_PUBLICOS/class_dict.csv --inspecionar
+python -m src.validar_dataset --split train val test
+```
+
+Após revisar a inspeção, execute o preparo sem `--inspecionar` para converter máscaras em polígonos. `--sobrescrever` refaz apenas train/val/test e preserva splits extras; a divisão por imagem do dataset público não é o agrupamento por local do P3. `--lado-maior`, `--area-min` e `--epsilon` controlam redução e conversão.
+
+Para dados próprios autorizados, em saídas separadas dos originais:
+
+```bash
+python -m src.limpar_imagens --origem FOTOS_ORIGINAIS --saida DADOS_LIMPOS --simular
+python -m src.selecionar_imagens --origem DADOS_LIMPOS --saida DADOS_SELECIONADOS --n-teste 40 --n-reserva 60 --lado-maior 1024 --seed 42
+```
+
+O primeiro comando apenas simula; revisar o relatório antes de executá-lo sem `--simular`. A seleção exige fotos já gravadas na pasta de origem. Considere sessões/locais antes de definir treino e avaliação. Consulte [FLUXO_DE_DADOS.md](docs/FLUXO_DE_DADOS.md) para o processo real de SAM/CVAT, as etapas externas e as limitações de reprodução sem os dados privados.
+
+## Testes
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-Para avaliar modelos, passe sempre `--pesos` explicitamente, por exemplo
-`python -m src.evaluate --pesos models/mvp_final.pt --split test`.
+A suíte usa imagens sintéticas, stubs de modelo e objetos simulados do Telegram: não precisa de pesos, rede, token real ou GPU. O teste opcional relacionado a pi_heif é ignorado quando o pacote não existe. Aprovação da suíte não comprova operação ao vivo do bot.
+
+## Limitações e perspectivas
+
+- Rótulos SAM/CVAT com 1768 avisos geométricos remanescentes em 358 imagens; a triagem não certifica cada contorno. Fonte: chaves `qualidade_rotulos.*`.
+- Um local/sessão no teste, sem confirmação em voo independente. O bootstrap por imagem não modela essa diversidade ausente.
+- IoU/Dice por união de áreas diferem de mAP de instâncias e não validam medida de terreno em metros quadrados.
+- Teste vivo do bot, consentimento das fotos e validação externa permanecem pendentes de comprovação.
+- Próximos passos: revisar referências problemáticas, obter fotos de novo local/voo com autorização e registrar validação humana. Qualquer configuração deve ser decidida com val; test serve para confirmação.
+
+## Licenças e créditos
+
+Consulte [LICENCAS_E_CREDITOS.md](docs/LICENCAS_E_CREDITOS.md). Licenças de dependências, dados e publicação dos pesos precisam de avaliação do responsável; não foi criada uma licença global para este repositório.
+
+## Equipe
+
+- Gustavo Barros Martins.
+- Hugo Alexandre Carvalho Coelho Coutinho.
+- Jeferson Machado dos Santos.
+- Maicon de Sousa Pontes.
+
+[PREENCHER: divisão de tarefas confirmada].
+
+Papel do repositório Geo_Map: [PREENCHER: confirmar relação com este projeto].
