@@ -26,3 +26,8 @@ models/*.pt
 .vscode/
 .idea/
 .DS_Store
+
+# Credencial local de interface e gráficos públicos revisados (sem fotos)
+front-login/.env.local
+!docs/figuras/
+!docs/figuras/*.png
