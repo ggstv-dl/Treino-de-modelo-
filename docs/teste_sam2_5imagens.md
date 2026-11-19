@@ -1,7 +1,7 @@
-# Teste SAM 2.1 Tiny nas cinco primeiras imagens CEU Paz
+# Teste SAM 2.1 Tiny nas cinco primeiras imagens local_historico_01
 
 Em 02/11/2026, o SAM 2.1 Hiera Tiny foi testado nas cinco primeiras imagens PNG,
-em ordem de nome, de `dataset/rotulagem_ceu_paz/images`. O usuário confirmou esse
+em ordem de nome, de `dataset/rotulagem_local_historico_01/images`. O usuário confirmou esse
 lote. Os dados e as anotações originais foram preservados por conferência de
 SHA-256 antes e depois de cada execução e novamente ao final.
 
@@ -42,11 +42,11 @@ dos prompts; SAM não foi usado para classificá-las automaticamente.
 
 | Imagem | Prompts por passagem |
 | --- | ---: |
-| `CEUPAZ2022_DJI_0005_x0500_y0400.png` | 20 |
-| `CEUPAZ2022_DJI_0017_x1500_y0900.png` | 18 |
-| `CEUPAZ2022_DJI_0022_x1800_y1000.png` | 35 |
-| `CEUPAZ2022_DJI_0032_x2500_y1700.png` | 13 |
-| `CEUPAZ2022_DJI_0043_x2000_y1800.png` | 33 |
+| `local_historico_012022_DJI_0005_x0500_y0400.png` | 20 |
+| `local_historico_012022_DJI_0017_x1500_y0900.png` | 18 |
+| `local_historico_012022_DJI_0022_x1800_y1000.png` | 35 |
+| `local_historico_012022_DJI_0032_x2500_y1700.png` | 13 |
+| `local_historico_012022_DJI_0043_x2000_y1800.png` | 33 |
 
 As máscaras binárias das passagens repetidas tiveram IoU 1,0 dentro de cada
 dispositivo. Entre CPU e GPU, a IoU média foi **99,958%**, e a mínima, **99,436%**.
@@ -59,7 +59,7 @@ Feche a instância antiga após salvar suas anotações. Na raiz do projeto:
 
 ```bash
 .venv/bin/python scripts/xanylabeling_gpu.py \
-  --filename dataset/rotulagem_ceu_paz/images
+  --filename dataset/rotulagem_local_historico_01/images
 ```
 
 Selecione **Segment Anything 2.1 (Tiny)** no painel de modelos. O iniciador
@@ -84,8 +84,8 @@ Na raiz do projeto, execute CPU antes de GPU, para disponibilizar a referência
 de comparação numérica:
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/testar_sam2_ceu_paz.py --device cpu
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/testar_sam2_ceu_paz.py --device gpu
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/testar_sam2_local_historico_01.py --device cpu
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/testar_sam2_local_historico_01.py --device gpu
 ```
 
 O teste GPU deve ser executado no terminal com acesso real à GPU. Neste ambiente,

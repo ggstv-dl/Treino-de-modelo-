@@ -1,4 +1,4 @@
-"""Executa o fine-tuning CEU Paz com configuração isolada e monitoramento de GPU."""
+"""Executa o fine-tuning local_historico_01 com configuração isolada e monitoramento de GPU."""
 import argparse
 from datetime import datetime
 import hashlib
@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--config", type=Path, default=ROOT / "configs/finetune_ceu_paz_5.yaml")
+    p.add_argument("--config", type=Path, default=ROOT / "configs/finetune_local_historico_01_5.yaml")
     p.add_argument("--smoke", action="store_true", help="três épocas com todos os 285 exemplos")
     args = p.parse_args()
     cfg = yaml.safe_load(args.config.read_text())

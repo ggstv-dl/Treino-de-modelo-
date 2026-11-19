@@ -1,32 +1,32 @@
 {
   "data": "2026-11-02",
   "selecionadas": [
-    "CEUPAZ2022_DJI_0005_x0500_y0400.png",
-    "CEUPAZ2022_DJI_0017_x1500_y0900.png",
-    "CEUPAZ2022_DJI_0022_x1800_y1000.png",
-    "CEUPAZ2022_DJI_0032_x2500_y1700.png",
-    "CEUPAZ2022_DJI_0043_x2000_y1800.png"
+    "local_historico_012022_DJI_0005_x0500_y0400.png",
+    "local_historico_012022_DJI_0017_x1500_y0900.png",
+    "local_historico_012022_DJI_0022_x1800_y1000.png",
+    "local_historico_012022_DJI_0032_x2500_y1700.png",
+    "local_historico_012022_DJI_0043_x2000_y1800.png"
   ],
   "excluidas": [
-    "CEUPAZ2022_DJI_0054_x3200_y0600.png",
-    "CEUPAZ2022_DJI_0064_x3000_y1600.png",
-    "CEUPAZ2022_DJI_0074_x0500_y1300.png",
-    "CEUPAZ2022_DJI_0089_x2600_y1400.png",
-    "CEUPAZ2022_DJI_0102_x1400_y1600.png",
-    "CEUPAZ2022_DJI_0132_x1600_y1000.png",
-    "CEUPAZ2022_DJI_0148_x2000_y0700.png"
+    "local_historico_012022_DJI_0054_x3200_y0600.png",
+    "local_historico_012022_DJI_0064_x3000_y1600.png",
+    "local_historico_012022_DJI_0074_x0500_y1300.png",
+    "local_historico_012022_DJI_0089_x2600_y1400.png",
+    "local_historico_012022_DJI_0102_x1400_y1600.png",
+    "local_historico_012022_DJI_0132_x1600_y1000.png",
+    "local_historico_012022_DJI_0148_x2000_y0700.png"
   ],
   "dataset": {
     "train": 285,
     "val": 80,
     "test": 40
   },
-  "poligonos_ceu_paz": 119,
+  "poligonos_local_historico_01": 119,
   "poligonos_total": 6434,
   "configuracao": {
-    "data": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/dataset_ceu_paz_5/dataset.yaml",
-    "project": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs",
-    "name": "ceu_paz_5_finetune",
+    "data": "<PROJETO>/runs/dataset_local_historico_01_5/dataset.yaml",
+    "project": "<PROJETO>/runs",
+    "name": "local_historico_01_5_finetune",
     "exist_ok": false,
     "epochs": 20,
     "patience": 5,
@@ -49,9 +49,9 @@
   "smoke": {
     "inicio": "2026-11-02T05:05:23.141343-03:00",
     "configuracao": {
-      "data": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/dataset_ceu_paz_5/dataset.yaml",
-      "project": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs",
-      "name": "ceu_paz_5_finetune_smoke",
+      "data": "<PROJETO>/runs/dataset_local_historico_01_5/dataset.yaml",
+      "project": "<PROJETO>/runs",
+      "name": "local_historico_01_5_finetune_smoke",
       "exist_ok": false,
       "epochs": 3,
       "patience": 5,
@@ -71,7 +71,7 @@
       "save_period": -1,
       "plots": false
     },
-    "pesos_origem": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/mvp_drone/weights/best.pt",
+    "pesos_origem": "<PROJETO>/runs/mvp_drone/weights/best.pt",
     "pesos_origem_sha256": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1",
     "amp_efetivo": true,
     "batch_efetivo": 8,
@@ -79,7 +79,7 @@
     "lotes_por_epoca": 36,
     "tempo_total_s_inclui_setup_e_avaliacao": 26.80980994299989,
     "pesos_origem_preservados": true,
-    "saida": "/home/gustavobm/Área de trabalho/treino-de-modelo/runs/ceu_paz_5_finetune_smoke",
+    "saida": "<PROJETO>/runs/local_historico_01_5_finetune_smoke",
     "metricas_finais": {
       "metrics/precision(B)": 0.7367519636777472,
       "metrics/recall(B)": 0.630650243995945,
@@ -349,7 +349,7 @@
         }
       }
     },
-    "ceu_paz_treino": {
+    "local_historico_01_treino": {
       "imagens": 5,
       "mIoU_anterior": 0.35579982490409306,
       "mIoU_candidato": 0.38664056717638146,
@@ -392,12 +392,12 @@
   },
   "pesos_anterior": "runs/mvp_drone/weights/best.pt",
   "pesos_anterior_sha256": "5273d0c771806307aabace260495866f5d088859851abf0a4a7490b3fde16ff1",
-  "pesos_candidato": "runs/ceu_paz_5_finetune/weights/best.pt",
+  "pesos_candidato": "runs/local_historico_01_5_finetune/weights/best.pt",
   "pesos_candidato_sha256": "24eec0ab6ed7d5d6d82f8e456db1ae983e34f5e12a43fb527efd2842299a0053",
   "originais_e_copias_conferidos_por_hash": true,
   "modelo_padrao_alterado": false,
   "limites": [
-    "Cinco CEU Paz são treino, não avaliação independente.",
+    "Cinco local_historico_01 são treino, não avaliação independente.",
     "Dez fotos próprias são diagnóstico de um mesmo voo já consultado.",
     "Vegetação nas fotos próprias e mIoU no teste antigo regrediram.",
     "Rótulos antigos reconstruídos; comparação usa os mesmos arquivos em ambos os modelos."

@@ -1,15 +1,15 @@
-# Fine-tuning com cinco recortes CEU Paz — 02/11/2026
+# Fine-tuning com cinco recortes local_historico_01 — 02/11/2026
 
-O usuário confirmou os cinco primeiros recortes CEU Paz como completamente
+O usuário confirmou os cinco primeiros recortes local_historico_01 como completamente
 rotulados e orientou excluir os sete restantes, substituindo o plano inicial
 de aguardar os 12. Essa seleção é registrada no manifesto; os campos de revisão
 dos JSON originais foram preservados.
 
 ## Dataset separado
 
-Foi criado `runs/dataset_ceu_paz_5`, contendo:
+Foi criado `runs/dataset_local_historico_01_5`, contendo:
 
-- Treino: 280 imagens antigas e cinco CEU Paz, total de **285**.
+- Treino: 280 imagens antigas e cinco local_historico_01, total de **285**.
 - Validação: as mesmas **80** imagens do split antigo.
 - Teste: as mesmas **40** imagens do split antigo.
 - Fotos próprias: dez imagens mantidas fora do treinamento.
@@ -30,7 +30,7 @@ Há **405 pares válidos e 6434 polígonos** no dataset resultante, sem imagens
 binariamente duplicadas. A preparação validou classes, coordenadas finitas em
 0–1, quantidade de pontos e presença dos pares. Os hashes das imagens copiadas,
 dos rótulos novos e dos arquivos de origem ficam em
-`runs/dataset_ceu_paz_5/manifesto.json`. As imagens, anotações e pesos originais
+`runs/dataset_local_historico_01_5/manifesto.json`. As imagens, anotações e pesos originais
 não foram sobrescritos.
 
 ## Configuração
@@ -39,7 +39,7 @@ O treino usa os pesos `runs/mvp_drone/weights/best.pt` como inicialização, com
 Ultralytics 8.4.190, PyTorch 2.14.1+cu130 e a RTX 4050. Não é um resume do estado
 de otimização: os pesos anteriores foram finalizados sem otimizador.
 
-A configuração está em `configs/finetune_ceu_paz_5.yaml`: 20 épocas no máximo,
+A configuração está em `configs/finetune_local_historico_01_5.yaml`: 20 épocas no máximo,
 patience 5, batch 8, entrada 640, dois workers, AMP, AdamW e learning rate 1e-4.
 O aquecimento dura uma época e o bias também começa em 1e-4, evitando o valor
 padrão 0,1 durante a adaptação de pesos já treinados. As outras augmentações
@@ -55,13 +55,13 @@ Na raiz do projeto, com acesso à GPU:
 
 ```bash
 # Cria uma pasta nova; recusa sobrescrever uma saída existente.
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/preparar_finetuning_ceu_paz.py
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/preparar_finetuning_local_historico_01.py
 
 # Três épocas com todos os dados, incluindo os cinco recortes.
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/treinar_ceu_paz.py --smoke
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/treinar_local_historico_01.py --smoke
 
 # Fine-tuning principal, limitado a 20 épocas e sujeito a early stopping.
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/treinar_ceu_paz.py
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/treinar_local_historico_01.py
 ```
 
 Se o dataset já estiver preparado, pular a primeira linha. Para reconstruir
@@ -71,9 +71,9 @@ uma outra cópia, fornecer `--saida` apontando a uma pasta nova. O trainer mant�
 Para avaliar um candidato:
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/avaliar_ceu_paz.py \
-  --pesos runs/ceu_paz_5_finetune/weights/best.pt \
-  --saida runs/ceu_paz_5_avaliacao_repro.json
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/avaliar_local_historico_01.py \
+  --pesos runs/local_historico_01_5_finetune/weights/best.pt \
+  --saida runs/local_historico_01_5_avaliacao_repro.json
 ```
 
 O avaliador usa os mesmos parâmetros e funções semânticas de `src.evaluate`,
@@ -94,7 +94,7 @@ e não houve imagens corrompidas ou erro de memória. A loss de segmentação ca
 de 1,662 para 1,484. A taxa inicial padrão do bias, porém, provocou uma queda
 transitória na validação, motivando sua redução antes de repetir o teste.
 
-Esse primeiro teste ficou em `runs/segment/runs/ceu_paz_5_smoke`, pois um project
+Esse primeiro teste ficou em `runs/segment/runs/local_historico_01_5_smoke`, pois um project
 relativo foi expandido pelo Ultralytics. O iniciador passou a resolver o caminho
 absoluto, mantendo a saída principal diretamente em `runs/`.
 
@@ -127,7 +127,7 @@ workers após o teste válido. A velocidade histórica de 211,655 s/época não 
 ser interpretada como benchmark controlado de hardware contra esta execução:
 o regime de fine-tuning e o dataset também mudaram.
 
-Pesos novos: **`runs/ceu_paz_5_finetune/weights/best.pt`**. O modelo padrão em
+Pesos novos: **`runs/local_historico_01_5_finetune/weights/best.pt`**. O modelo padrão em
 `src/config.py` continua apontando para os pesos anteriores; nenhum checkpoint
 antigo foi substituído. O SHA-256 de ambos os modelos está no JSON dos resultados.
 
@@ -140,7 +140,7 @@ confiança 0,25, máscaras nativas e resolução de sobreposição por confianç
 | --- | ---: | ---: | ---: | ---: |
 | Teste antigo, Semantic Drone | 40 | 89,31% | 89,05% | −0,26 p.p. |
 | Fotos próprias, fora do treino | 10 | **51,76%** | **58,93%** | **+7,17 p.p.** |
-| CEU Paz, conjunto de treino | 5 | 35,58% | 38,66% | +3,08 p.p. |
+| local_historico_01, conjunto de treino | 5 | 35,58% | 38,66% | +3,08 p.p. |
 
 Nas fotos próprias, o mDice passou de **67,57% para 73,43%**. O baseline em GPU
 tem pequenas diferenças em relação ao relatório anterior em CPU; os valores
@@ -152,7 +152,7 @@ acima comparam duas execuções novas com a mesma configuração.
 | Vegetação | **64,16%** | 59,57% | −4,59 p.p. |
 | Via | 38,56% | **43,89%** | +5,33 p.p. |
 
-![Comparação dos modelos](finetuning_ceu_paz_5_comparacao.png)
+![Comparação dos modelos](finetuning_local_historico_01_5_comparacao.png)
 
 O candidato melhorou a média nas fotos próprias, principalmente construção,
 com regressão em vegetação e pequena perda no teste antigo. O resultado justifica
@@ -160,7 +160,7 @@ avaliar esse candidato para o cenário de drone, mas não demonstra ganho unifor
 entre classes nem generalização para outros voos. Nenhum hiperparâmetro adicional
 foi ajustado usando os resultados finais das dez fotos próprias.
 
-As métricas CEU Paz medem ajuste aos próprios exemplos de treino; não são usadas
+As métricas local_historico_01 medem ajuste aos próprios exemplos de treino; não são usadas
 como evidência de generalização. O checkpoint foi escolhido pelo critério nativo
 de validação do Ultralytics, sem selecionar pesos a partir do teste final.
 
@@ -168,13 +168,13 @@ Para experimentar o candidato em uma imagem:
 
 ```bash
 .venv/bin/python -m src.predict CAMINHO_DA_FOTO \
-  --pesos runs/ceu_paz_5_finetune/weights/best.pt
+  --pesos runs/local_historico_01_5_finetune/weights/best.pt
 ```
 
-O [resumo em JSON](finetuning_ceu_paz_5_resultados.json) registra configuração,
+O [resumo em JSON](finetuning_local_historico_01_5_resultados.json) registra configuração,
 curvas de seis épocas, métricas por classe, hashes dos pesos e monitoramento.
-Os detalhes por imagem ficam em `runs/ceu_paz_5_avaliacao_baseline.json` e
-`runs/ceu_paz_5_avaliacao_candidato.json`. `results.csv`, `execucao.json`,
+Os detalhes por imagem ficam em `runs/local_historico_01_5_avaliacao_baseline.json` e
+`runs/local_historico_01_5_avaliacao_candidato.json`. `results.csv`, `execucao.json`,
 `gpu.csv`, gráficos e pesos ficam na pasta da execução principal.
 
 Ao final, foram novamente conferidos os hashes dos arquivos originais e dos

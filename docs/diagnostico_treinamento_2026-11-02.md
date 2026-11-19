@@ -1,24 +1,24 @@
 # Diagnóstico de treinamento — 02/11/2026
 
-Situação atual: o fine-tuning com cinco recortes CEU Paz foi concluído em GPU, com seis épocas e early stopping.
+Situação atual: o fine-tuning com cinco recortes local_historico_01 foi concluído em GPU, com seis épocas e early stopping.
 Gargalo atual: confirmar generalização em outros voos e avaliar a regressão em vegetação.
 Recomendação: comparar o novo candidato com os pesos anteriores, preservados como padrão do projeto.
 Tempo medido: 63,49 s incluindo setup e avaliação final do treino; a avaliação semântica foi feita separadamente.
 Resultado: mIoU nas dez fotos próprias passou de 51,76% para 58,93%, com perda de 0,26 p.p. no teste antigo.
 
 O restante deste documento registra o diagnóstico e as estimativas iniciais.
-A execução e os resultados atuais estão no [relatório do fine-tuning](finetuning_ceu_paz_5.md).
+A execução e os resultados atuais estão no [relatório do fine-tuning](finetuning_local_historico_01_5.md).
 
 Prazo confirmado pelo usuário: **04/11/2026, 23h59, America/Sao_Paulo, incluindo avaliação**.
 Às 02h05 de 02/11, restavam aproximadamente 69h53. Só esta máquina está disponível.
 O usuário não sabe onde estão os rótulos antigos. Implementação e treinamento dependem de aprovação posterior.
 
 Decisão atual do usuário, posterior ao plano inicial de concluir os 12 recortes:
-**usar somente os cinco primeiros recortes CEU Paz, declarados completamente
+**usar somente os cinco primeiros recortes local_historico_01, declarados completamente
 rotulados, e excluir os sete restantes**. O dataset separado contém 280 imagens
 antigas e cinco novas no treino, preservando as 80 de validação e 40 de teste.
 O novo preparo, o teste curto, o fine-tuning e a comparação final foram concluídos
-conforme essa orientação. Os detalhes atualizados ficam em `finetuning_ceu_paz_5.md`.
+conforme essa orientação. Os detalhes atualizados ficam em `finetuning_local_historico_01_5.md`.
 
 Atualização após a instalação do driver pelo usuário, em 02/11: a RTX 4050 está
 usando o módulo NVIDIA Open 595.112.07. Uma verificação fora do ambiente isolado
@@ -59,7 +59,7 @@ geradas diretamente desse CSV, sem suavização.
 | Dados antigos | 280 imagens de treino, 80 de validação e 40 de teste; JPEG, 1024 × 682; 132.585.311 bytes no total |
 | Rótulos antigos | Faltam os 400 TXT nas pastas `dataset/labels/train`, `val` e `test` |
 | Dados próprios de avaliação | 10 fotos de 4032 × 2268; 176 polígonos válidos exportados em `dataset/labels/images` |
-| Novos dados | 12 recortes CEU Paz de 1536 × 1536; três JSON presentes, totalizando 62 formas; nenhum TXT exportado na pasta prevista |
+| Novos dados | 12 recortes local_historico_01 de 1536 × 1536; três JSON presentes, totalizando 62 formas; nenhum TXT exportado na pasta prevista |
 | CPU e RAM | Intel Core i5-13420H, 12 CPUs lógicas; aproximadamente 15 GiB RAM, 8,1 GiB disponíveis na leitura; sem swap |
 | GPU | `/proc/driver/nvidia/gpus/.../information` identifica RTX 4050 Laptop; VRAM não foi medida |
 | Armazenamento | Volume local NVMe, aproximadamente 167 GiB livres na leitura |
@@ -176,7 +176,7 @@ com o mIoU semântico usado nesta avaliação.
 | Checkpoints | `save=True`, `save_period=-1`: sem arquivos periódicos extras, mas last é salvo por época e best quando melhora. Cada arquivo final tem ~20,5 MB; custo histórico não foi cronometrado. |
 | Validação | Ocorre em cada época em 80 exemplos. É útil para seleção e early stopping; sem medição separada, não há base para prometer ganho removendo avaliações. |
 | Padding | Imagens antigas têm proporção 1024:682; um letterbox quadrado 640 conteria cerca de 33,4% de padding vertical. É cálculo geométrico; mosaic/escala mudam isso no treino. `rect=True` muda também a amostragem/augmentações: testar antes de adotar. |
-| Duplicação | SHA-256 não encontrou duplicatas binárias entre as 422 imagens das cinco pastas. Isso não detecta cenas vizinhas ou quase duplicatas. CEU Paz tem sobreposição espacial documentada. |
+| Duplicação | SHA-256 não encontrou duplicatas binárias entre as 422 imagens das cinco pastas. Isso não detecta cenas vizinhas ou quase duplicatas. local_historico_01 tem sobreposição espacial documentada. |
 | Épocas | Retornos menores após ~60–80 épocas. Não há justificativa para reiniciar 100 épocas para incorporar poucos exemplos. |
 | Integridade | Faltam rótulos para os 400 exemplos antigos. `carregar_ground_truth` retorna máscara vazia para TXT ausente; executar a avaliação padrão agora produziria referência incorreta. |
 
@@ -236,7 +236,7 @@ smoke test e na disponibilidade. Não prometer melhoria apenas por aumentar épo
 
 Usar uma saída de dataset separada e copiar a atribuição atual de nomes aos
 splits, preservando o teste. O arquivo
-`/home/gustavobm/Downloads/semantic_drone_dataset.zip` existe, tem cerca de 4,14 GB
+`<DADOS>/Downloads/semantic_drone_dataset.zip` existe, tem cerca de 4,14 GB
 e seu índice contém 400 máscaras semânticas e `class_dict.csv`. Ele oferece uma
 rota para reconstrução; não contém, por isso só, a prova de quais parâmetros de
 conversão geraram os antigos TXT. O conversor atual preserva buracos: comparar

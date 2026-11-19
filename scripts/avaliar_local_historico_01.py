@@ -1,6 +1,6 @@
 """Avalia pesos no teste antigo, nas fotos próprias e nos cinco recortes de treino.
 
-Usa as mesmas métricas semânticas de src.evaluate; os recortes CEU Paz são treino,
+Usa as mesmas métricas semânticas de src.evaluate; os recortes local_historico_01 são treino,
 portanto suas métricas não representam generalização. Nenhum original é editado.
 """
 import argparse
@@ -28,19 +28,19 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--pesos", type=Path, required=True)
     p.add_argument("--saida", type=Path, required=True)
-    p.add_argument("--dataset", type=Path, default=ROOT / "runs/dataset_ceu_paz_5")
+    p.add_argument("--dataset", type=Path, default=ROOT / "runs/dataset_local_historico_01_5")
     p.add_argument("--device", default="0")
     args = p.parse_args()
     if args.saida.exists():
         raise FileExistsError(args.saida)
     names = {0: "construcao", 1: "vegetacao", 2: "via"}
-    ceu = sorted((args.dataset / "images/train").glob("CEUPAZ*.png"))
+    ceu = sorted((args.dataset / "images/train").glob("local_historico_01*.png"))
     if len(ceu) != 5:
-        raise ValueError("Esperados exatamente cinco recortes CEU Paz")
+        raise ValueError("Esperados exatamente cinco recortes local_historico_01")
     cases = {
         "teste_semantic_drone": (sorted((args.dataset / "images/test").glob("*.jpg")), args.dataset / "labels/test"),
         "fotos_proprias": (sorted((ROOT / "dataset/rotulagem_propria/images").glob("*.JPG")), ROOT / "dataset/labels/images"),
-        "ceu_paz_treino": (ceu, args.dataset / "labels/train"),
+        "local_historico_01_treino": (ceu, args.dataset / "labels/train"),
     }
     paths = [args.pesos]
     for images, labels in cases.values():
@@ -55,7 +55,7 @@ def main():
     torch.set_num_threads(2)
     result = {"pesos": str(args.pesos), "pesos_sha256": before[str(args.pesos)],
               "device": device, "imgsz": 640, "conf": 0.25, "conjuntos": {},
-              "limites": "CEU Paz é conjunto de treino; fotos próprias são diagnóstico de um voo já consultado. Rótulos antigos foram reconstruídos pelo conversor atual."}
+              "limites": "local_historico_01 é conjunto de treino; fotos próprias são diagnóstico de um voo já consultado. Rótulos antigos foram reconstruídos pelo conversor atual."}
     for case, (images, labels) in cases.items():
         start = time.perf_counter()
         inter, pred_pixels, gt_pixels = (np.zeros(3, dtype=np.int64) for _ in range(3))

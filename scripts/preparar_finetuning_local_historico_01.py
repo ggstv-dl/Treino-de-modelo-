@@ -1,4 +1,4 @@
-"""Recupera rótulos antigos e incorpora apenas os cinco primeiros recortes CEU Paz.
+"""Recupera rótulos antigos e incorpora apenas os cinco primeiros recortes local_historico_01.
 
 Grava um dataset novo em runs/ e preserva imagens, JSON, splits e pesos originais.
 Os cinco recortes foram declarados completos pelo usuário; não são revisão automática.
@@ -63,11 +63,11 @@ def converter_anotacao(path, image, names):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--zip", type=Path, default=Path.home() / "Downloads/semantic_drone_dataset.zip")
-    p.add_argument("--saida", type=Path, default=ROOT / "runs/dataset_ceu_paz_5")
+    p.add_argument("--saida", type=Path, default=ROOT / "runs/dataset_local_historico_01_5")
     args = p.parse_args()
     output = args.saida.resolve()
     names = {0: "construcao", 1: "vegetacao", 2: "via"}
-    ceu_images = sorted((ROOT / "dataset/rotulagem_ceu_paz/images").glob("*.png"))
+    ceu_images = sorted((ROOT / "dataset/rotulagem_local_historico_01/images").glob("*.png"))
     if len(ceu_images) < 5:
         raise ValueError("São necessários cinco recortes")
     selected = ceu_images[:5]
@@ -131,7 +131,7 @@ def main():
         label = output / "labels/train" / f"{image.stem}.txt"
         label.write_text("\n".join(lines) + "\n")
         manifest["arquivos"].append({"imagem": str(destination.relative_to(output)), "split": "train",
-            "origem": "ceu_paz_abril_2022", "poligonos": len(lines), "por_classe": counts,
+            "origem": "local_historico_01_abril_2022", "poligonos": len(lines), "por_classe": counts,
             "imagem_sha256": sha256(destination), "rotulo_sha256": sha256(label)})
     cfg = {"path": str(output), "train": "images/train", "val": "images/val", "test": "images/test", "names": names}
     (output / "dataset.yaml").write_text(yaml.safe_dump(cfg, allow_unicode=True))

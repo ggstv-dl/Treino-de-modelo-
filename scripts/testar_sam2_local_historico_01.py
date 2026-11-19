@@ -1,4 +1,4 @@
-"""Mede SAM 2.1 Tiny nas cinco primeiras imagens CEU Paz, sem editar os dados.
+"""Mede SAM 2.1 Tiny nas cinco primeiras imagens local_historico_01, sem editar os dados.
 
 Executar CPU antes de GPU para comparar as máscaras com os mesmos prompts.
 O runtime GPU fica em runs/runtime_sam2_cuda13, separado da instalação atual.
@@ -53,7 +53,7 @@ def main():
     weights = Path.home() / "xanylabeling_data/models/sam2_hiera_tiny-r20240801"
     encoder = weights / "sam2.1_hiera_tiny.encoder.onnx"
     decoder = weights / "sam2.1_hiera_tiny.decoder.onnx"
-    images = sorted((ROOT / "dataset/rotulagem_ceu_paz/images").glob("*.png"))[:5]
+    images = sorted((ROOT / "dataset/rotulagem_local_historico_01/images").glob("*.png"))[:5]
     if len(images) != 5:
         raise RuntimeError("Esperadas cinco imagens")
     originals = images + [p.with_suffix(".json") for p in images] + [encoder, decoder, source]
