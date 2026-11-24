@@ -37,6 +37,7 @@ Principal público, SHA8 `0692f705`; chaves `principal_proprio_*` e `comparacao_
 
 ## Demonstração
 
+- [Guia para executar a demonstração](docs/DEMONSTRACAO.md).
 - [PREENCHER: link do bot ou da demo].
 - [PREENCHER: link do vídeo].
 
